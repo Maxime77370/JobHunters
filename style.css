@@ -37,6 +37,16 @@ main{
     padding: 1vw;
 }
 
+a{
+    text-decoration: none;
+    color: black;
+    transition: font-size 0.5s;
+}
+
+a:hover{
+    font-size: 1.2em;
+}
+
 #job-board{
 
     width: 90vw;
@@ -49,10 +59,16 @@ main{
 }
 
 .job{
-    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 2vh;
     background-color: white;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.job p{
+    margin-block-start: 0px;
 }
 
 .search-bar{
@@ -66,15 +82,29 @@ main{
 }
 
 #search{
-    width: 30vw;
-    height: 5vh;
+    border: none;
+    outline: none;
+    background-color: rgb(237, 237, 237);
+    padding : 1vw;
+    width : 30vw;
+    height: 3vh;
     border-radius: 2vh;
+}
+
+.btn{
+    all: unset;
+    background-color: rgb(237, 237, 237);
+    padding: 1vh;
+    border-radius: 2vh;
+    align-self: center;
+    justify-content: center;
 }
 
 footer{
     width: 100vw;
-    position: absolute;
+    position: relative;
     bottom: 0;
+    height: fit-content;
 
     background-color: blanchedalmond;
 }
