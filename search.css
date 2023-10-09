@@ -1,0 +1,52 @@
+
+.search-bar{
+    display : flex;
+    align-items: center;
+    justify-content: space-around;
+
+    width: 100vw;
+    padding: 1vh 5vw;
+}
+
+#search{
+    border: none;
+    outline: none;
+    background-color: rgb(237, 237, 237);
+    padding : 1vw;
+    width : 30vw;
+    height: 3vh;
+    border-radius: 2vh;
+}
+
+#job-board{
+
+    width: 90vw;
+
+    background-color: rgb(147, 71, 255);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    padding: 5vw;
+}
+
+.job{
+    display: flex;
+    flex-direction: column;
+    padding: 2vh;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.job p{
+    margin-block-start: 0px;
+}
+
+.btn{
+    all: unset;
+    background-color: rgb(237, 237, 237);
+    padding: 1vh;
+    border-radius: 2vh;
+    align-self: center;
+    justify-content: center;
+}

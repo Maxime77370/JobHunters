@@ -13,28 +13,7 @@ main{
     justify-content: center;
     flex-direction: column;
 
-    background-color: blueviolet;
-}
-
-#nav-bar{
-    width: 100vw;
-    height: 10vh;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-direction: row;
-
-    background-color: rgb(255, 197, 197);
-}
-
-.nav-ul{
-    padding-inline-start: 0px;
-    padding: 1vw;
-}
-.nav-ul li{
-    display: inline;
-    padding: 1vw;
+    background-color: rgb(138, 43, 226);
 }
 
 a{
@@ -47,64 +26,32 @@ a:hover{
     font-size: 1.2em;
 }
 
-#job-board{
+#nav-bar{
+    width: 100vw;
+    height: 10vh;
 
-    width: 90vw;
-
-    background-color: aliceblue;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 30px;
-    padding: 5vw;
-}
-
-.job{
     display: flex;
-    flex-direction: column;
-    padding: 2vh;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-}
-
-.job p{
-    margin-block-start: 0px;
-}
-
-.search-bar{
-    display : flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    flex-direction: row;
 
-    width: 60vw;
-    padding: 1vh 5vw;
-    background-color: rgb(255, 197, 197);
+    background-color: rgb(255, 255, 255);
 }
 
-#search{
-    border: none;
-    outline: none;
-    background-color: rgb(237, 237, 237);
-    padding : 1vw;
-    width : 30vw;
-    height: 3vh;
-    border-radius: 2vh;
+.nav-ul{
+    padding-inline-start: 0px;
+    padding: 1vw;
+}
+.nav-ul li{
+    display: inline;
+    padding: 1vw;
 }
 
-.btn{
-    all: unset;
-    background-color: rgb(237, 237, 237);
-    padding: 1vh;
-    border-radius: 2vh;
-    align-self: center;
-    justify-content: center;
-}
+
 
 footer{
     width: 100vw;
     position: relative;
     bottom: 0;
     height: fit-content;
-
-    background-color: blanchedalmond;
 }
