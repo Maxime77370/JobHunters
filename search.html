@@ -3,33 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <title>Search</title>
 </head>
 <body>
     <header>
         <div id="nav-bar">
-            <ul>
+            <ul class="nav-ul" id="page">
                 <li><a href="home.html">Home</a></li>
                 <li><a href="search.html">Search</a></li>
                 <li><a href="profile.html">Profile</a></li>
             </ul>
-        </div>
-        <div id="register">
-            <a href="portal.html">register</a>
-        </div>
-        <div id="sign">
-            <a href="portal.html">sign</a>
+            <ul class="nav-ul" id="connect">
+                <a href="portal.html">register</a>
+                <a href="portal.html">sign</a>
+            </ul>
         </div>
     </header>
     <main>
-        <div id="search-bar">
+        <from action="search.php" class="search-bar">
             <input type="text" name="search" id="search">
             <button>search</button>
+        </from>
+        <div id="job-board">
+            <div class="job"></div>
+            <div class="job"></div>
+            <div class="job"></div>
+            <div class="job"></div>
+            <div class="job"></div>
+            <div class="job"></div>
         </div>
     </main>
     <footer>
         <div id="footer">
-            <ul>
+            <ul class="nav-ul">
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
