@@ -3,42 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="search.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Search</title>
 </head>
 <body>
-    <header>
-        <div id="nav-bar">
-            <ul class="nav-ul" id="page">
-                <li><a href="home.html">Home</a></li>|
-                <li><a href="search.html">Search</a></li>|
-                <li><a href="profile.html">Profile</a></li>
-            </ul>
-            <ul class="nav-ul" id="connect">
-                <a href="portal.html">register</a>
-                |
-                <a href="portal.html">sign</a>
-            </ul>
-        </div>
+    <header id="header">
     </header>
+    <hr>
     <main>
-        <from action="search.php" class="search-bar">
+        <form action="#" class="search-bar">
             <input type="text" name="search" id="search" placeholder="Rechercher le post">
             <input type="text" name="search" id="search" placeholder="Lieux">
             <button class="btn">search</button>
-        </from>
+        </form>
+        <div id="fade"></div>
         <div id="job-board">
         </div>
     </main>
-    <footer>
-        <div id="footer">
-            <ul class="nav-ul">
-                <li><a href="about.html">About</a></li>|
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
+    <hr>
+    <footer id="footer">
     </footer>
-    <script src="show_job.js"></script>
+    <script src="js/loader.js"></script>
+    <script src="js/show_search.js"></script>
 </body>
 </html>

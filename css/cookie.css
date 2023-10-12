@@ -1,0 +1,58 @@
+@import url("variables.css") all;
+
+#cookie {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    -webkit-backdrop-filter: blur(2px);
+    transition: all 0.5s;
+}
+
+#cookie-box{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 70vw;
+    height: 70vh;
+    margin-top: -35vh;
+    margin-left: -35vw;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: var(--box_shadow);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+#cookie-box p{
+    margin: 5vh;
+}
+
+#cookie-checkbox{
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+
+input[type="checkbox"]{
+    width: 2vh;
+    height: 2vh;
+    padding: 0;
+    margin : 1vw;
+}
+
+
+#cookie-btn{
+    width: 100%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+}
+
+.btn{
+    margin: 1vh;
+}

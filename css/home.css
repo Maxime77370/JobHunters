@@ -1,0 +1,21 @@
+@import url("variables.css") all;
+
+.main-box{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    padding: 5vw;
+    background-color: var(--color_secondary)
+}
+
+.big-box{
+    margin-right: 20%;
+    border-radius: 5px;
+    padding: 2vw;
+    background-color: white;
+    box-shadow: var(--box_shadow);
+
+}
+
+.box{
+    background-color: white;
+}

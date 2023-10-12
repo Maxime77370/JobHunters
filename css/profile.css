@@ -1,0 +1,29 @@
+@import url("variables.css") all;
+
+#profile-box{
+    width: 90vw;
+    background-color: var(--color_secondary);
+    padding: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#profile{
+    display: grid;
+    z-index: 1;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2vw;
+    padding: 5vw;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: var(--box_shadow);
+}
+
+#picture{
+    width: 20vw;
+    height: 20vw;
+    border-radius: 50%;
+    background-color: var(--color_main);
+    box-shadow: var(--box_shadow);
+}

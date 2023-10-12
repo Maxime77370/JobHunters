@@ -1,0 +1,21 @@
+@import url("variables.css") all;
+
+.main-box{
+    background-color: var(--color_secondary);
+}
+
+.about-box{
+    margin-right: 20%;
+    border-radius: 5px;
+    padding: 2vw;
+    background-color: white;
+    box-shadow: var(--box_shadow);
+}
+
+.box{
+    background-color: white;
+}
+
+.mini-box{
+    background-color: white;
+}

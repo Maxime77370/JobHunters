@@ -1,36 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contact.css">
+
     <title>Contact</title>
 </head>
+
 <body>
-    <header>
-        <div id="nav-bar">
-            <ul>
-                <li><a href="home.html">Home</a></li>
-                <li><a href="search.html">Search</a></li>
-                <li><a href="profile.html">Profile</a></li>
-            </ul>
-        </div>
-        <div id="register">
-            <a href="portal.html">register</a>
-        </div>
-        <div id="sign">
-            <a href="portal.html">sign</a>
-        </div>
+    <header id="header">
     </header>
-    <main>
+    <div id="fade"></div>
+    <main class="main-box">
+        <form action="#">
+                <div class="box_cont">
+                    <div class="box_name">
+                        <label class="space" for="nom">
+                            <h3>Nom :</h3>
+                        </label>
+                        <input type="text" id="nom" name="nom" required>
+                    </div>
+                    <div class="box_name">
+                        <label for="prénom">
+                            <h3>Prénom :</h3>
+                        </label>
+                        <input type="text" id="prénom" name="prénom" required>
+                    </div>
+                </div>
+                <label for="email">
+                    <h3>Email :</h3>
+                </label>
+                <input type="email" id="email" name="email" required>
+
+                <label for="message">
+                    <h3>Message :</h3>
+                </label>
+                <textarea id="message" name="message" rows="4" required></textarea>
+
+                <button type="submit">
+                    <h3>Envoyer</h3>
+                </button>
+                <div class="tel"><h3>Tel: 09.12.34.56.78</h3></div>
+        </form>
+        
     </main>
-    <footer>
-        <div id="footer">
-            <ul>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
-    </footer>
+    <div id="inverse-fade"></div>
+    <footer id="footer"></footer>
+    <script src="js/loader.js"></script>
 </body>
+
 </html>
