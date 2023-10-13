@@ -1,4 +1,10 @@
-ask_cookies = true;
+ask_cookies = false;
+
+const body = document.getElementsByTagName('body')[0];
+const header = document.getElementById("header");
+const main = document.getElementsByTagName("main")[0];
+const footer = document.getElementById("footer");
+
 
 function createDivParent() {
   const div_parent = document.getElementsByTagName("footer")[0];

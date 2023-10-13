@@ -1,21 +1,54 @@
 @import url("variables.css") all;
 
-.main-box{
+.main-box-about {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: auto;
     background-color: var(--color_secondary);
 }
 
-.about-box{
-    margin-right: 20%;
+.grande-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: auto;
+    background-color: white;
     border-radius: 5px;
-    padding: 2vw;
-    background-color: white;
     box-shadow: var(--box_shadow);
+    margin-top: 3vh;
+    margin-bottom: 3vh;
+    margin-left: 3vh;
+    margin-right: 3vh;
 }
 
-.box{
-    background-color: white;
+.box-box {
+    display: flex;
 }
 
-.mini-box{
-    background-color: white;
+.personne {
+    text-align: center;
+    margin: 0 20px;
+}
+
+.img-cercle {
+    border-radius: 50%;
+    width: 15vh;
+    height: 15vh;
+    padding: 3vh;
+}
+
+.text-box {
+    text-align: center;
+    margin-top: 20px;
+    padding: 2vw;
+}
+
+@media screen and (max-width: 720px) {
+    .main-box-about{
+        display: flex;
+    }
+    .box-box {
+        flex-direction: column;
+    }
 }

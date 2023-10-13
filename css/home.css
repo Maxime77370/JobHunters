@@ -1,13 +1,17 @@
 @import url("variables.css") all;
 
-.main-box{
+.main-box-home {
+    width: 90vw;
+    background-color: var(--color_secondary);
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 5vw;
     padding: 5vw;
-    background-color: var(--color_secondary)
+    overflow-x: hidden;
+
 }
 
-.big-box{
+.big-box {
     margin-right: 20%;
     border-radius: 5px;
     padding: 2vw;
@@ -16,6 +20,15 @@
 
 }
 
-.box{
+.box {
     background-color: white;
+}
+
+@media screen and (max-width: 1280px) {
+    .main-box-home {
+        grid-template-columns: 1fr;
+    }
+    .big-box{
+        margin-right: 5vw;
+    }
 }

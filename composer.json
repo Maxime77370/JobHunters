@@ -1,0 +1,15 @@
+{
+    "name": "vendor/autoload",
+    "autoload": {
+        "psr-4": {
+            "Vendor\\Autoload\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Carpentier Maxime",
+            "email": "maxime.carpentier@epitech.eu"
+        }
+    ],
+    "require": {}
+}
