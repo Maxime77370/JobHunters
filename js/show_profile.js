@@ -16,7 +16,7 @@ function create_profile() {
     let div_parent = document.getElementById("profile-box");
     let div = document.createElement("div");
     div.id = "profile";
-    div.innerHTML = "<img src=\"img/profile_"+user_json.id+".png\" alt=\"profile picture\" id=\"picture\">";
+    div.innerHTML = "<img src=\"img/profile_1.png\" alt=\"profile picture\" id=\"picture\">";
     div.innerHTML += "<button class=\"btn\" id=\"btn_picture_"+user_json.id+"\">modify</button>";
     div.innerHTML += "<p>Username : " + user_json.username + "</p>";
     div.innerHTML += "<button class=\"btn\" id=\"btn_id_"+user_json.id+"\">modify</button>";

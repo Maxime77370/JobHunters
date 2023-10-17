@@ -17,3 +17,8 @@
 [+] Installation de la BDD (MySQL) :
   - Users, job_advertisements, companies, job_applications
   - ajout des clés primaires (id) et étrangères (references)
+
+
+installation des pip :
+
+bcrypt, fastapi, uvicorn, python-jose, PyJWT, pydantic, passlib, mysql-connector, mysql, jwt

@@ -1,10 +1,26 @@
-const connected = true;
+const token = localStorage.getItem("Jeton JWT");
+
+let connected = false;
+let user_data = null;
+
+if (token) {
+    try {
+        const decoded = JSON.parse(atob(token.split(".")[1]));
+        user_data=  {
+            id : decoded.sub,
+            username : decoded.username,
+        };
+        connected = true;
+    } catch (error) {
+        console.error("Erreur de décodage du token:", error);
+    }
+}
 
 let div_parent = document.querySelectorAll("#connect");
 
 function create_connexion(){
     for (div of div_parent){
-        div.innerHTML = "<li><a href=\"portal.html\">register</a><\li>|"
+        div.innerHTML = "<li><a href=\"login.html\">register</a><\li>|"
         div.innerHTML += "<li><a href=\"portal.html\">sign</a><\li>"
     }
 }
@@ -17,12 +33,7 @@ function create_connected(user_data){
 }
 
 if (connected){
-    user_data = {
-        id : 1,
-        username : "username1"
-    }
     create_connected(user_data);
-}
-else {
+    } else {
     create_connexion();
 }

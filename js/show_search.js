@@ -6,7 +6,7 @@ body.appendChild(body_css);
 
 async function init_advertisement() {
     try {
-        const response = await fetch("http://localhost:8500/get_id_advertisements/job_advertisements", {
+        const response = await fetch("http://localhost:8000/get_id_advertisements/job_advertisements", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -31,7 +31,7 @@ async function init_advertisement() {
 async function creat_job_advertisement(id) {
 
     try {
-        const response = await fetch("http://localhost:8500/get_advertisement/"+id, {
+        const response = await fetch("http://localhost:8000/get_advertisement/"+id, {
             method: "GET",
         });
     

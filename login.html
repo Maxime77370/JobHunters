@@ -15,7 +15,7 @@
             <button id="login-button">Connexion</button>
             <button id="register-button">Inscription</button>
         </div>
-        <form id="login-form" action="login.php" method="post">
+        <form id="login-form"  method="get">
             <h2>Connexion</h2>
             <label for="login-username">Nom d'utilisateur :</label>
             <input type="text" id="login-username" name="username" required>
@@ -24,7 +24,7 @@
             <button type="submit">Se connecter</button>
         </form>
         <h2>Inscription</h2>
-        <form id="register-form">
+        <form id="register-form" method="post">
             <label for="username">Nom d'utilisateur :</label>
             <input type="text" id="username" name="username" required>
             
