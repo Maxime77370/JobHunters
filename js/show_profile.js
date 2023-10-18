@@ -12,7 +12,14 @@ user_json = {
     picture : "picture1"
 }
 
-function create_profile() {
+companie_json = {
+    id : 1,
+    name : "companie1",
+    description : "description1",
+    picture : "picture1"
+} 
+
+function create_profile_user() {
     let div_parent = document.getElementById("profile-box");
     let div = document.createElement("div");
     div.id = "profile";
@@ -29,4 +36,17 @@ function create_profile() {
     div_parent.appendChild(div);
 }
 
-create_profile();
+function create_profile_companie(){
+    let div_parent = document.getElementById("profile-box");
+    let div = document.createElement("div");
+    div.id = "profile";
+    div.innerHTML = "<img src=\"img/profile_"+user_json.id+".png\" alt=\"profile picture\" id=\"picture\">";
+    div.innerHTML += "<button class=\"btn\" id=\"btn_picture_"+user_json.id+"\">modify</button>";
+    div.innerHTML += "<p>Companie Name : " + user_json.name + "</p>";
+    div.innerHTML += "<button class=\"btn\" id=\"btn_name_"+user_json.id+"\">modify</button>";
+    div.innerHTML += "<p>Description : " + user_json.description + "</p>";
+    div.innerHTML += "<button class=\"btn\" id=\"btn_description_"+user_json.id+"\">modify</button>";
+    div_parent.appendChild(div);
+}
+
+create_profile_companie();

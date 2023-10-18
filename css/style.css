@@ -30,7 +30,7 @@ main{
     justify-content: center;
     flex-direction: column;
 
-    background-color: var(--color_main);
+    background-color: var(--color_secondary);
 }
 
 a{
