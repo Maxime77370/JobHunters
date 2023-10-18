@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel='stylesheet' href='css/admin.css'>
+    <title>Document</title>
+</head>
+<body>
+    <header id="header"></header>
+    <main>
+        <div id="admin-modifier" class="box">
+            <table id="table-input-db">
+            </table>
+        </div>
+        <div id="admin-console" class="box">
+            <div id="admin-console-output">
+            </div>
+            <div id="admin-console-input">
+                <input type="text" id="admin-input" placeholder="Enter a command">
+                <button id="admin-btn">Execute</button>
+            </div>
+        </div>
+        <div id="admin-dashboard" class="box">
+            <h1>Admin Dashboard</h1>
+            <hr>
+            <br>
+            <label for="select-db">Choose a database :</label>
+            <select name="database" id="select-db">
+                <option value="companies">Companies</option>
+                <option value="job_advertisements">Job</option>
+                <option value="job_applications">Application</option>
+                <option value="users">User</option>
+            </select>
+            <br>
+            <div id="db-viewer">
+                <table id="table-db">
+                    <thead id="table-head-db">
+                    </thead>
+                    <tbody id="table-body-db">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    <footer id="footer"></footer>
+    <script src="js/loader.js"></script>
+    <script src="js/show_admin.js"></script>
+</body>
+</html>

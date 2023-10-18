@@ -31,6 +31,39 @@
     padding: 5vw;
 }
 
+.job-full{
+    z-index: 2;
+    box-shadow: var(--box_shadow) ;
+    border-radius: 2vw;
+    transition: all 0.5s;
+    position: absolute;
+    background-color: white;
+    width: 50vw;
+    height: 50vh;
+    top: 20vh;
+    left: 20vw;
+    backdrop-filter: blur(2px);
+    padding: 5vw;
+}
+
+.mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba( 0, 0, 0, 0.6 );
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1;
+}
+
+.exit{
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
 .job{
     display: flex;
     flex-direction: column;
@@ -42,6 +75,23 @@
 
 .job p{
     margin-block-start: 0px;
+}
+
+.title{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.location{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.wages{
+    width: fit-content;
+    background-color: rgb(189, 189, 189);
+    border-radius: 2vw;
+    padding: 1vw;
 }
 
 @media screen and (max-width: 519px) {

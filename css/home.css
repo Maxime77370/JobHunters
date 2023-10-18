@@ -24,6 +24,14 @@
     background-color: white;
 }
 
+.long-box{
+    grid-column: 1/4;
+    border-radius: 5px;
+    padding: 2vw;
+    background-color: white;
+    box-shadow: var(--box_shadow);
+}
+
 @media screen and (max-width: 1280px) {
     .main-box-home {
         grid-template-columns: 1fr;
