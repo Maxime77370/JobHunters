@@ -1,5 +1,8 @@
 ask_cookies = false;
 
+const token = localStorage.getItem("Jeton JWT");
+
+
 const body = document.getElementsByTagName('body')[0];
 const header = document.getElementById("header");
 const main = document.getElementsByTagName("main")[0];

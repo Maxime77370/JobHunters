@@ -1,5 +1,3 @@
-const token = localStorage.getItem("Jeton JWT");
-
 let connected = false;
 let user_data = null;
 

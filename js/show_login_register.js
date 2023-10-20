@@ -93,7 +93,6 @@ loginForm.addEventListener("submit", async (e) => {
             // Stockage du jeton JWT dans le stockage local (localStorage)
             localStorage.setItem("Jeton JWT", data.token);
             console.log("Connexion réussie !");
-                   
           
             window.location.href = "search.html";
         } else {

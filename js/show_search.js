@@ -19,7 +19,7 @@ async function init_advertisement() {
             },
         });
 
-        
+
 
         if (response.ok) {
             const data = await response.json();
@@ -118,19 +118,20 @@ async function creat_job_advertisement(id , count_job) {
                 job.classList.add("job-full");
                 if (body.offsetWidth < 719) {
                     job.style.transition = "all 0.5s";
-                    job.style.maxHeight = "1000vh";
+                    job.style.maxHeight = "80vh";
                 }
                 else{
-                    console.log(count_job);
-                    if (count_job % 2 == 0) {
-                        job_side = all_job[count_job-2];
+                    console.log(count_job, all_job.length);
+                    if (count_job != all_job.length) {
+                        if (count_job % 2 == 0) {
+                            job_side = all_job[count_job-2];
+                        }
+                        else{
+                            job_side = all_job[count_job];
+                        }
+                        job_side.style.transition = "all 0.5s";
+                        job_side.style.maxWidth = "0";
                     }
-                    else{
-                        job_side = all_job[count_job];
-                    }
-                    job_side.style.transition = "all 0.5s";
-                    job_side.style.maxWidth = "0";
-
                     job.style.transition = "0.5s";
                     job.style.maxWidth = "80vw";
                     job.style.flex = "100%";
@@ -140,21 +141,22 @@ async function creat_job_advertisement(id , count_job) {
                 for (var i = 0; i < job_full.length; i++) {
                     var job = job_full[i];
                     if (body.offsetWidth < 719) {
-                        job.style.maxHeight = job_container
+                        job.style.maxHeight = "40ch";
                         job.classList.remove("job-full");
                     } 
                     else {
-                        if (count_job % 2 == 0) {
-                            job_side = all_job[count_job-2];
+                        if (count_job != all_job.length) {
+                            if (count_job % 2 == 0) {
+                                job_side = all_job[count_job-2];
+                            }
+                            else{
+                                job_side = all_job[count_job];
+                            }
+                            job_side.style.transition = "all 0.5s";
+                            job_side.style.maxWidth = "40vw";
                         }
-                        else{
-                            job_side = all_job[count_job];
-                        }
-                        job_side.style.transition = "all 0.5s";
-                        job_side.style.maxWidth = "40vw";
 
                         job.style.flex = "100%";
-                        job.style.order = "initial"; 
                         job.style.transition = "0.5s";
                         job.style.maxWidth = "40vw";
                         job.classList.remove("job-full");
