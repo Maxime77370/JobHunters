@@ -1,28 +1,57 @@
-const connected = true;
+const token = localStorage.getItem("Jeton JWT");
 
-let div_parent = document.querySelectorAll("#connect");
+let connected = false;
+let user_data = null;
 
-function create_connexion(){
-    for (div of div_parent){
-        div.innerHTML = "<li><a href=\"portal.html\">register</a><\li>|"
-        div.innerHTML += "<li><a href=\"portal.html\">sign</a><\li>"
+if (token) {
+    try {
+        const decoded = JSON.parse(atob(token.split(".")[1]));
+        user_data = {
+            id: decoded.sub,
+            username: decoded.username,
+            role: decoded.role,
+        };
+        connected = true;
+    } catch (error) {
+        console.error("Erreur de décodage du token:", error);
     }
 }
 
-function create_connected(user_data){
-    for (div of div_parent){
-        div.innerHTML = "<li><a href=\"profile.html\"><img src=\"img/profile_"+user_data.id+".png\" alt=\"profile picture nav\" id=\"nav-profile-picture\"> "+user_data.username+"</a><\li>|"
-        div.innerHTML += "<li><a href=\"portal.html\">Sign out</a><\li>"
+const div_parent = document.querySelectorAll("#connect");
+
+function create_connexion() {
+    for (div of div_parent) {
+        div.innerHTML += "<li><a href=\"login.html\">Login</a></li>";
     }
 }
 
-if (connected){
-    user_data = {
-        id : 1,
-        username : "username1"
+function create_connected(user_data) {
+    for (div of div_parent) {
+        div.innerHTML = `<li><a href="profile.html"><img src="img/profile_1.png" alt="profile picture nav" id="nav-profile-picture"> ${user_data.username}</a></li>|`;
+        if (user_data.role === "particulier") {
+            // Utilisateur particulier, n'ajoutez rien de spécial.
+        } else if (user_data.role === "entreprise") {
+            // Utilisateur entreprise, ajoutez des options d'entreprise.
+            div.innerHTML += '<li><a href="job_ads.html">Créer un job</a></li>|';
+            div.innerHTML += '<li><a href="personnaliser.html">Mon entreprise</a></li>';
+        } else if (user_data.role === "admin") {
+            // Utilisateur admin, ajoutez des options d'administration.
+            div.innerHTML += '<li><a href="admin.html">Page admin</a></li>';
+        }
+        div.innerHTML += '<li><a href="search.html" id="logout-button">Sign out</a></li>';
     }
+}
+
+if (connected) {
     create_connected(user_data);
-}
-else {
+} else {
     create_connexion();
 }
+
+// Ajouter un gestionnaire d'événements au niveau du document pour les clics
+document.addEventListener("click", (event) => {
+    if (event.target.id === "logout-button") {
+        // Supprimez le token du Local Storage lorsque l'utilisateur se déconnecte
+        localStorage.removeItem("Jeton JWT");
+    }
+});

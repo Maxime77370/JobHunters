@@ -1,0 +1,71 @@
+@import url("variables.css") all;
+
+.main-box-ann{
+    background-color: var(--color_secondary);
+}
+
+.title{
+    display: grid;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+form {
+    display: grid;
+    grid-gap: 15px;
+    border: solid white;
+    border-radius: 20px;
+    padding: 2vw;
+    background-color: white;
+}
+
+input, textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px var(--color_main) ;
+    border-radius: 2vh;
+
+}
+
+.ann-box{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 15px;
+}
+
+button {
+    background-color: rgb(237, 237, 237);
+    padding: 1vh;
+    border-radius: 2vh;
+    align-self: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+
+button:hover {
+    background-color: rgb(255, 255, 255);
+    box-shadow: var(--box_shadow);
+}
+
+@media (max-width: 1050px) {
+    .ann-box{
+        grid-template-columns: 1fr;
+    }    
+
+    button {
+        background-color: rgb(237, 237, 237);
+        padding: 1vh;
+        border-radius: 2vh;
+        align-self: center;
+        justify-content: center;
+        transition: all 0.5s;
+    }
+
+    button:hover {
+        background-color: rgb(255, 255, 255);
+        box-shadow: var(--box_shadow);
+    }
+}

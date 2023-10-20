@@ -1,7 +1,12 @@
-const body_css = document.createElement("link");
-body_css.rel = "stylesheet";
-body_css.href = "css/search.css";
-body.appendChild(body_css);
+const search_css = document.createElement("link");
+search_css.rel = "stylesheet";
+search_css.href = "css/search.css";
+body.appendChild(search_css);
+
+const postule_css = document.createElement("link");
+postule_css.rel = "stylesheet";
+postule_css.href = "css/postule.css";
+body.appendChild(postule_css);
 
 
 
@@ -14,11 +19,20 @@ async function init_advertisement() {
             },
         });
 
+        
+
         if (response.ok) {
             const data = await response.json();
-            data.forEach(item => { // Utilisez "data" au lieu de "array"
-                creat_job_advertisement(item.id);
-            });
+            count_job = 0;
+
+            async function createJobAdvertisementRecursively(index) {
+                if (index < data.length) {
+                    count_job++;
+                    await creat_job_advertisement(data[index].id, count_job);
+                    createJobAdvertisementRecursively(index + 1);
+                }
+            }
+            createJobAdvertisementRecursively(0); 
         } else {
             console.log("Erreur lors de la récupération des identifiants des offres d'emploi.");
         }
@@ -29,7 +43,7 @@ async function init_advertisement() {
 
 
 
-async function creat_job_advertisement(id) {
+async function creat_job_advertisement(id , count_job) {
 
     try {
         const response = await fetch("http://localhost:8000/get_table/job_advertisements/"+id, {
@@ -39,11 +53,17 @@ async function creat_job_advertisement(id) {
         if (response.ok) {
             const data = await response.json();
 
-            let div_parent = document.getElementById("job-board");
-            let div = document.createElement("div");
-            div.className = "job-card";
-            div.id = data.id;
-            div.className = "job";
+            let job_board = document.getElementById("job-board");
+            let job = document.createElement("div");
+            job.className = "job-card";
+            job.id = count_job;
+            job.className = "job";
+
+            let job_container = document.createElement("div");
+            job_container.className = "job-container";
+
+            let min_div = document.createElement("div");
+            min_div.className = "min";
 
             // Créez des éléments HTML pour afficher les informations de l'annonce
             let title = document.createElement("p");
@@ -68,27 +88,108 @@ async function creat_job_advertisement(id) {
             working_time.className = "working_time";
             working_time.textContent = data.working_time;
 
+            let max_div = document.createElement("div");
+            max_div.className = "max";
+
+
+            let full_description = document.createElement("p");
+            full_description.className = "full_description";
+            full_description.textContent = data.full_description;
+
             // Créez un bouton "Apply" et ajoutez un gestionnaire d'événements
             let applyButton = document.createElement("button");
             applyButton.className = "btn";
-            applyButton.textContent = "Show more";
-            applyButton.id = "btn_" + data.id;
+            applyButton.textContent = "Apply";
+            applyButton.id = "btn_apply_" + count_job;
+
+            let showButton = document.createElement("button");
+            showButton.className = "btn";
+            showButton.textContent = "Show";
+            showButton.id = "btn_show_" + count_job;
 
             // Gestionnaire d'événements pour le bouton "Apply" (exemple)
-            applyButton.addEventListener("click", () => {
-                creat_job_advertisement_full(data);
+            
+            showButton.addEventListener("click", () => {
+                var job_full = document.querySelectorAll(".job-full");
+                var all_job = document.querySelectorAll(".job");
+                
+                // Réinitialiser tous les éléments "job" existants
+                job = document.getElementById(count_job);
+                job.classList.add("job-full");
+                if (body.offsetWidth < 719) {
+                    job.style.transition = "all 0.5s";
+                    job.style.maxHeight = "1000vh";
+                }
+                else{
+                    console.log(count_job);
+                    if (count_job % 2 == 0) {
+                        job_side = all_job[count_job-2];
+                    }
+                    else{
+                        job_side = all_job[count_job];
+                    }
+                    job_side.style.transition = "all 0.5s";
+                    job_side.style.maxWidth = "0";
+
+                    job.style.transition = "0.5s";
+                    job.style.maxWidth = "80vw";
+                    job.style.flex = "100%";
+                }
+                
+
+                for (var i = 0; i < job_full.length; i++) {
+                    var job = job_full[i];
+                    if (body.offsetWidth < 719) {
+                        job.style.maxHeight = job_container
+                        job.classList.remove("job-full");
+                    } 
+                    else {
+                        if (count_job % 2 == 0) {
+                            job_side = all_job[count_job-2];
+                        }
+                        else{
+                            job_side = all_job[count_job];
+                        }
+                        job_side.style.transition = "all 0.5s";
+                        job_side.style.maxWidth = "40vw";
+
+                        job.style.flex = "100%";
+                        job.style.order = "initial"; 
+                        job.style.transition = "0.5s";
+                        job.style.maxWidth = "40vw";
+                        job.classList.remove("job-full");
+                    }
+                }
+                
+                // Appliquer les styles à l'élément sélectionné
+            });
+
+            applyButton.addEventListener("click", async () => {
+                apply_advertisment(data.id).then((form) => {
+                    
+                });
             });
 
             // Ajoutez le bouton au div parent
-            div.appendChild(title);
-            div.appendChild(location);
-            div.appendChild(working_time);
-            div.appendChild(salary);
-            div.appendChild(description);
+            job.appendChild(applyButton);
+            job.appendChild(showButton);
 
-            div.appendChild(applyButton);
+            min_div.appendChild(title);
+            min_div.appendChild(location);
+            min_div.appendChild(working_time);
+            min_div.appendChild(salary);
+            min_div.appendChild(description);
 
-            div_parent.appendChild(div);
+            max_div.appendChild(full_description);
+
+
+            job_container.appendChild(min_div);
+            job_container.appendChild(max_div);
+
+            job.appendChild(job_container);
+
+
+            job_board.appendChild(job);
 
         } else {
             console.log("Erreur lors de la récupération des identifiants des offres d'emploi.");
@@ -100,69 +201,87 @@ async function creat_job_advertisement(id) {
 
 }
 
-function creat_job_advertisement_full(data) {
-    let div = document.createElement("div");
-    div.className = "job-card";
-    div.id = data.id;
-    div.className = "job-full";
+async function apply_advertisment(id) {
+    // Créer le formulaire
+    const main_post = document.createElement("div");
+    main_post.className = "main-box-post";
 
-    let mask = document.createElement("div");
-    mask.className = "mask";
+    const form = document.createElement("form");
+    form.className = "postule";
+
+    // Créer la div avec la classe "title"
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "title";
+
+    // Créer le titre "Apply"
+    const title = document.createElement("h1");
+    title.textContent = "Apply";
+
+    // Créer la div avec la classe "post-box"
+    const postBoxDiv = document.createElement("div");
+    postBoxDiv.className = "post-box";
+
+    // Créer les champs du formulaire
+    const fields = [
+        { label: "Lettre de Motivation :", type: "textarea", id: "a_propos", name: "a_propos", placeholder: "Entrez une lettre de motivation", rows: 8, required: true }
+    ];
+
+    // Créer les champs du formulaire
+    fields.forEach((fieldData) => {
+        const label = document.createElement("label");
+        label.textContent = fieldData.label;
+
+        let input;
+        if (fieldData.type === "textarea") {
+            input = document.createElement("textarea");
+            input.rows = fieldData.rows || 4; // Par défaut, 4 lignes
+        } else {
+            input = document.createElement("input");
+            input.type = fieldData.type;
+        }
+
+        input.id = fieldData.id;
+        input.name = fieldData.name;
+        input.placeholder = fieldData.placeholder;
+        input.required = fieldData.required;
+
+        // Ajouter le label et l'input à la div "post-box"
+        postBoxDiv.appendChild(label);
+        postBoxDiv.appendChild(input);
+
+    
+    });
 
     let exitButton = document.createElement("button");
-    exitButton.className = "btn exit";
+    exitButton.className = "btn";
     exitButton.textContent = "X";
-    exitButton.id = "btn_exit_" + data.id;
-
-    let title = document.createElement("p");
-    title.className = "title";
-    title.textContent = data.title;
-
-    let description = document.createElement("p");
-    description.className = "description";
-    description.textContent = data.description;
-
-    let full_description = document.createElement("p");
-    full_description.className = "full_description";
-    full_description.textContent = data.full_description;
-
-    // Ajoutez ces éléments au div parent
-    console.log(data)
-    // Créez un élément pour afficher le lieu
-    let location = document.createElement("p");
-    location.className = "location";
-    location.textContent = data.location; // Supposons que l'emplacement de l'annonce soit stocké dans data.location
-
-    let salary = document.createElement("p");
-    salary.className = "wages";
-    salary.textContent = data.wages + "€/an";
-
-    // Créez un bouton "Apply" et ajoutez un gestionnaire d'événements
-    let applyButton = document.createElement("button");
-    applyButton.className = "btn";
-    applyButton.textContent = "Apply";
-    applyButton.id = "btn_" + data.id;
-
-    // Gestionnaire d'événements pour le bouton "Apply" (exemple)
-    applyButton.addEventListener("click", () => {
-        alert("Vous avez postulé à l'offre d'emploi " + data.title);
-    });
-
-    div.appendChild(title);
-    div.appendChild(location);
-    div.appendChild(salary);
-    div.appendChild(description);
-    div.appendChild(full_description);
-    div.appendChild(applyButton);
-    div.appendChild(exitButton);
-
-    body.appendChild(mask);
-    body.appendChild(div);
+    exitButton.id = "btn-exit";
 
     exitButton.addEventListener("click", () => {
-        div.remove();
-        mask.remove();
+        main_post.remove();
     });
+
+    // Créer le bouton "Envoyer"
+    const submitButton = document.createElement("button");
+    submitButton.type = "submit";
+    submitButton.textContent = "Envoyer";
+
+    // Ajouter le titre, la div "post-box" et le bouton au formulaire
+    titleDiv.appendChild(title);
+    form.appendChild(titleDiv);
+    form.appendChild(postBoxDiv);
+    form.appendChild(submitButton);
+    form.appendChild(exitButton);
+
+    main_post.appendChild(form);
+    
+    body.appendChild(main_post);
+
+    exitButton.style = "top: " + form.offsetTop + "px; left: " + form.offsetWidth + "px; position: absolute;";
+
+
+
+    return form;
 }
 
 // Fonction pour effectuer la recherche
@@ -184,7 +303,7 @@ function performSearch() {
         if (!titleText.includes(searchName) || !descriptionText.includes(searchName) || !locationText.includes(searchLocation)) {
             element.style.display = "none";
         } else {
-            element.style.display = "flex"; // Show elements that match the search term
+            element.style.display = "block"; // Show elements that match the search term
         }
     }
 }

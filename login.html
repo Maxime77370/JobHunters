@@ -1,52 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
     <title>Connexion / Inscription</title>
 </head>
+
 <body>
     <header id="header">
     </header>
-    <hr>
-    <main>
-        <div id="login-register">
-            <button id="login-button">Connexion</button>
-            <button id="register-button">Inscription</button>
+    <div id="fade"></div>
+    <main class="main-box-login">
+        <div class="flip-container">
+            <div class="flipper">
+                <div class="front">
+                    <form class="form-sign" id="login-form" action="login.php" method="post">
+                        <h2>Connexion</h2>
+                        <div class="regi">
+                            <label for="login-username">Nom d'utilisateur :</label>
+                            <input type="text" id="login-username" name="username" required>
+        
+                            <label for="login-password">Mot de passe :</label>
+                            <input type="password" id="login-password" name="password" required>
+                        </div>
+                        <br>
+                        <button class="btn3" type="submit" style="flex: 2;">Se connecter</button>
+                    </form>
+                </div>
+                <div class="back">
+                    <form class="form-regi" id="register-form">
+                        <div id="error-popup" class="error-popup">
+                            <p> Le mot de passe doit contenir au moins une majuscule, un chiffre, et doit contenir 8 caractères.</p>
+                        </div>
+                        <h2>Inscription</h2>
+                        <div class="regi">
+                            <button class="btn3" type="button" id ="btn-particulier" value="role" >Particulier</button>
+                            <button class="btn3" type="button" id ="btn-entreprise" value="role">Entreprise</button>
+        
+                            <label for="username">Nom d'utilisateur :</label>
+                            <input type="text" id="username" name="username" required>
+        
+                            <label for="password">Mot de passe :</label>
+                            <input type="password" id="password" name="password" required>
+        
+                            <label for="phone">Téléphone :</label>
+                            <input type="text" id="phone" name="phone" required>
+        
+                            <label for="email">Adresse e-mail :</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <input type = "hidden" id = "role" name = "role">
+                        <br>
+                        <button class="btn3" type="submit">S'inscrire</button>
+                    </form>
+                </div>
+            </div>
         </div>
-        <form id="login-form" action="login.php" method="post">
-            <h2>Connexion</h2>
-            <label for="login-username">Nom d'utilisateur :</label>
-            <input type="text" id="login-username" name="username" required>
-            <label for="login-password">Mot de passe :</label>
-            <input type="password" id="login-password" name="password" required>
-            <button type="submit">Se connecter</button>
-        </form>
-        <h2>Inscription</h2>
-        <form id="register-form">
-            <label for="username">Nom d'utilisateur :</label>
-            <input type="text" id="username" name="username" required>
-            
-            <label for="password">Mot de passe :</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="phone">Téléphone :</label>
-            <input type="text" id="phone" name="phone" required>
-            
-            <label for="role">Rôle :</label>
-            <input type="text" id="role" name="role" required>
-            
-            <label for="email">Adresse e-mail :</label>
-            <input type="email" id="email" name="email" required>
-            
-            <button type="submit">S'inscrire</button>
-        </form>
+        <br>
+        <div id="login-register">
+            <button class="btn3" id="login-button">Connexion</button>
+            <button class="btn3" id="register-button">Inscription</button>
+        </div>
     </main>
-    <hr>
+    <div id="inverse-fade"></div>
     <footer id="footer">
     </footer>
     <script src="js/loader.js"></script>
     <script src="js/show_login_register.js"></script>
 </body>
+
 </html>

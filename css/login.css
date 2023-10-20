@@ -1,0 +1,99 @@
+@import url("variables.css") all;
+
+:root{
+    --box_width : 50ch;
+    --box_height : 40ch;
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.regi {
+    display: grid;
+    max-width: var(--box_width - 4vh);
+    max-height: var(--box_height - 4vh);
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 2vh;
+}
+
+.btn3 {
+    background-color: rgb(237, 237, 237);
+    padding: 1vh;
+    border-radius: 2vh;
+    cursor: pointer;
+    align-self: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+
+.btn3.selected {
+    background-color: rgb(41, 72, 226);
+    color: white;
+}
+
+.btn3:hover {
+    background-color: rgb(41, 72, 226);
+    align-items: center;
+}
+
+.error.popup {
+        display: none; /* Caché par défaut */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Arrière-plan semi-transparent */
+        z-index: 1000; /* Mettez une valeur élevée pour s'assurer que la popup est au-dessus de tout le reste */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 18px;
+    }
+
+.flip-container {
+    perspective: 1000px;
+    width: var(--box_width);
+    height: var(--box_height);
+    position: relative;
+}
+
+.flipper {
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+}
+
+.front, .back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    backface-visibility: hidden;
+}
+
+.front {
+    background-color: white;
+    border-radius: 2vh;
+    padding: 2vh;
+    height: auto;
+}
+
+.back {
+    background-color: white;
+    border-radius: 2vh;
+    padding: 2vh;
+    transform: rotateY(180deg);
+    height: auto;
+}
+
+@media screen and (max-width: 719px) {
+    .regi {
+        grid-template-columns: 1fr;
+    }
+}

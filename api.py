@@ -1,15 +1,32 @@
 from pydantic import BaseModel
 import mysql.connector
-from fastapi import FastAPI, HTTPException, Depends
+from enum import Enum
+from fastapi import FastAPI, Security, HTTPException, Depends, Cookie, status, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordBearer, SecurityScopes, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
+import logging
 
-
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 app = FastAPI(debug=True)
 
-# Configuration de la base de données
+# Configuration de hachage des mots de passe
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# Génération du jeton JWT
+def generate_token(data: dict):
+    to_encode = data.copy()
+    expires = datetime.utcnow() + timedelta(minutes=30)  # Ajoutez votre propre durée d'expiration
+    to_encode.update({"exp": expires})
+    encoded_jwt = jwt.encode(to_encode, "0000", algorithm="HS256")  # Remplacez "YOUR_SECRET_KEY" par votre propre clé secrète
+    return encoded_jwt
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+
 db_config = {
     "host": "127.0.0.1",
     "port": "8889",
@@ -25,7 +42,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 # Modèles de données Pydantic pour validation
 class Advertisement(BaseModel):
     title: str
@@ -47,12 +63,29 @@ class User(BaseModel):
     phone: str
     role: str
 
+class UserCookieInfo(BaseModel):
+    username: str
+    password: str
+    role: str
+
 class JobApplication(BaseModel):
     user_id: int
     job_advertisement_id: int
     message: str
 
-    # Modèle Pydantic pour validation des informations de connexion
+class User(BaseModel):
+    username: str
+    password: str
+    email: str
+    phone: str
+    role: str
+
+class UserRole(str, Enum):
+    admin = "admin"
+    entreprise = "entreprise"
+    particulier = "particulier"
+
+# Modèle Pydantic pour validation des informations de connexion
 class UserLogin(BaseModel):
     username: str
     password: str
@@ -67,9 +100,8 @@ class UserRegister(BaseModel):
 
 # Modèle de données Pydantic pour un jeton JWT (contenant des informations de l'utilisateur)
 class Token(BaseModel):
-    access_token: str
+    user_data: str
     token_type: str
-
 
 @app.post("/create_job_advertisements")
 def create_job_advertisements(job_advertisement: Advertisement):
@@ -103,21 +135,21 @@ def create_companies(company: Company):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
     
-@app.post("/create_users")
-def create_users(user: User):
+@app.post("/create_users", response_model=User)
+def register(user: UserRegister):
     try:
+        hashed_password = pwd_context.hash(user.password)
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         query = "INSERT INTO users (username, password, email, phone, role) VALUES (%s, %s, %s, %s, %s)"
-        values = (user.username, user.password, user.email, user.phone, user.role)
+        values = (user.username, hashed_password, user.email, user.phone, user.role)
         cursor.execute(query, values)
         conn.commit()
-        created_id = cursor.lastrowid
         cursor.close()
         conn.close()
-        return {"message": "User created successfully", "id": created_id}
+        return user
     except Exception as e:
-        return {"message": f"Error: {str(e)}"}
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
 @app.post("/create_job_applications")
 def create_job_applications(job_application: JobApplication):
@@ -211,7 +243,6 @@ def delete(table: str, id: int):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
 
-
 @app.get("/get_table/{table}/{id}")
 def get_table(table: str, id: int):
     try:
@@ -263,99 +294,60 @@ def get_key_table(table: str):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
 
-# Configuration de hachage des mots de passe
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# Route de connexion avec vérification des informations d'identification
+@app.post("/login")
+async def login(user: UserLogin):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT id, username, password, email, phone, role FROM users WHERE username = %s"
+        cursor.execute(query, (user.username,))
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if result:
+            if pwd_context.verify(user.password, result["password"]):
+                user_data = {"username": result["username"], "role": result["role"], "id": result["id"], "email": result["email"], "phone": result["phone"]}
+                token = generate_token(user_data)
+                return {"token": token, "user_data": user_data}
+            else:
+                raise HTTPException(status_code=401, detail="Invalid credentials")
+        else:
+            raise HTTPException(status_code=401, detail="Invalid credentials")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
-# Clé secrète pour JWT 
-SECRET_KEY = "118181013"
-ALGORITHM = "HS256"
+# Route pour se déconnecter et supprimer le token du Local Storage
+@app.post("/logout")
+async def logout():
+    return {"message": "Successfully logged out"}
 
-# Durée de validité du jeton JWT (30 minutes dans cet exemple)
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+# vérifier si quelqu'un est d'une entreprise
+def is_entreprise(token: str = Security(oauth2_scheme, scopes=["entreprise"])):
+    user_data = generate_token(token)
+    if user_data and user_data.get("role") == "entreprise":
+        return True
+    return False
 
+# vérifier si quelqu'un est un "admin"
+def is_admin(token: str = Depends(oauth2_scheme)):
+    user_data = generate_token(token)
+    if user_data and user_data.get("role") == "admin":
+        return True
+    return False
 
-# Fonction pour créer un jeton JWT
-def create_access_token(data: dict, expires_delta: timedelta = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
+# route pour permette au role entreprise d'accèder à la page des annonces d'emploi job_ads.html
+@app.get("/job_ads")
+def job_ads_page(is_entreprise: bool = Depends(is_entreprise)):
+    if is_entreprise:
+        return {"message": "Bienvenue sur la page des annonces d'emploi pour les entreprises"}
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return Token(access_token=encoded_jwt, token_type="bearer")
-
-
-# Fonction pour créer un nouvel utilisateur dans la base de données
-def create_user_in_db(user: UserRegister):
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        query = "INSERT INTO users (username, password, email, phone, role) VALUES (%s, %s, %s, %s, %s)"
-        values = (user.username, user.password, user.email, user.phone, user.role)
-        cursor.execute(query, values)
-        conn.commit()
-        created_id = cursor.lastrowid
-        cursor.close()
-        conn.close()
-        return created_id
-    except Exception as e:
-        return None  # Gérer l'erreur ici
-
-# Fonction pour obtenir l'ID d'un utilisateur à partir de son nom d'utilisateur
-def get_user_id_from_db(username: str):
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        query = "SELECT id FROM users WHERE username = %s"
-        cursor.execute(query, (username,))
-        result = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if result:
-            return result[0]
-        return None
-    except Exception as e:
-        return None  # Gérer l'erreur ici
-
-# Fonction pour obtenir le rôle d'un utilisateur à partir de son nom d'utilisateur
-def get_user_role_from_db(username: str):
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        query = "SELECT role FROM users WHERE username = %s"
-        cursor.execute(query, (username,))
-        result = cursor.fetchone()
-        cursor.close()
-        conn.close()
-        if result:
-            return result[0]
-        return None
-    except Exception as e:
-        return None  # Gérer l'erreur ici
-
-
-# Route pour l'inscription d'un utilisateur
-@app.post("/register", response_model=Token)
-async def register_user(user: UserRegister):
-    user_id = create_user_in_db(user)
+        raise HTTPException(status_code=403, detail="Accès refusé")
     
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username, "user_id": user_id, "role": user.role},
-        expires_delta=access_token_expires
-    )
-    return access_token
-
-# Route pour la connexion d'un utilisateur
-@app.post("/login", response_model=Token)
-async def login_for_access_token(user: UserLogin):
-    user_id = get_user_id_from_db(user.username)
-    user_role = get_user_role_from_db(user.username)
-    
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username, "user_id": user_id, "role": user_role},
-        expires_delta=access_token_expires
-    )
-    return access_token
+# route pour permette au role admin d'accèder à la page admin.html
+@app.get("/admin")
+def admin_page(is_admin: bool = Depends(is_admin)):
+    if is_admin:
+        return {"message": "Bienvenue sur la page admin"}
+    else:
+        raise HTTPException(status_code=403, detail="Accès refusé")

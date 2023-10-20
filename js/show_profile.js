@@ -1,52 +1,61 @@
 const body_css = document.createElement("link");
 body_css.rel = "stylesheet";
 body_css.href = "css/profile.css";
-body.appendChild(body_css);
+document.body.appendChild(body_css);
 
-user_json = {
-    id : 1,
-    username : "username1",
-    password : "password1",
-    email : "email1",
-    phone : "0612345678",
-    picture : "picture1"
+const token = localStorage.getItem("Jeton JWT");
+
+// Fonction pour extraire les données de l'utilisateur depuis le jeton JWT
+function getUserDataFromToken(token) {
+    try {
+        const tokenPayload = JSON.parse(atob(token.split(".")[1]));
+        return {
+            id: tokenPayload.id,
+            username: tokenPayload.username,
+            email: tokenPayload.email,
+            companie: tokenPayload.companie,
+            role: tokenPayload.role,
+            phone: tokenPayload.phone,
+        };
+    } catch (error) {
+        console.error("Erreur de décodage du token :", error);
+        return null;
+    }
 }
 
-companie_json = {
-    id : 1,
-    name : "companie1",
-    description : "description1",
-    picture : "picture1"
-} 
+if (token) {
+    const user_data = getUserDataFromToken(token);
 
-function create_profile_user() {
-    let div_parent = document.getElementById("profile-box");
-    let div = document.createElement("div");
-    div.id = "profile";
-    div.innerHTML = "<img src=\"img/profile_"+user_json.id+".png\" alt=\"profile picture\" id=\"picture\">";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_picture_"+user_json.id+"\">modify</button>";
-    div.innerHTML += "<p>Username : " + user_json.username + "</p>";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_id_"+user_json.id+"\">modify</button>";
-    div.innerHTML += "<p>Email : " + user_json.email + "</p>";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_user_"+user_json.id+"\">modify</button>";
-    div.innerHTML += "<p>Phone : " + user_json.phone + "</p>";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_phone_"+user_json.id+"\">modify</button>";
-    div.innerHTML += "<p>password : " + "*"*user_json.password.lenght + "</p>";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_password_"+user_json.id+"\">modify</button>";
-    div_parent.appendChild(div);
+    if (user_data) {
+        const div_parent = document.getElementById("profile-box");
+        const div = document.createElement("div");
+        div.id = "profile";
+        div.innerHTML = `<img src="img/profile_1.png" alt="profile picture" id="picture">`;
+        div.innerHTML += `<button class="btn" id="btn_picture_${user_data.id}">modify</button>`;
+        div.innerHTML += `<p>Username : </p>`;
+        div.innerHTML += `<button class="btn" id="btn_username_${user_data.id}">${user_data.username}</button>`;
+        div.innerHTML += `<p>Email : </p>`;
+        div.innerHTML += `<button class="btn" id="btn_user_${user_data.id}">${user_data.email}</button>`;
+        div.innerHTML += `<p>Phone : </p>`;
+        div.innerHTML += `<button class="btn" id="btn_phone_${user_data.id}">${user_data.phone}</button>`;
+        
+        if (user_data.role === "particulier") {
+            // Utilisateur particulier, n'ajoutez rien de spécial.
+        } else if (user_data.role === "entreprise") {
+            // Utilisateur entreprise, affichez les informations de la compagnie ici.
+            div.innerHTML += `<p>Mon entreprise : </p>`;
+            div.innerHTML += `<button class="btn" id="btn_name_${user_data.id}">${user_data.companie}</button>`;
+            div.innerHTML += `<p>Description : </p>`;
+            div.innerHTML += `<button class="btn" id="btn_description_${user_data.id}">${user_data.description}</button>`;
+        }
+
+        div.innerHTML += `<p>Password : </p>`;
+        div.innerHTML += `<button class="btn" id="btn_password_${user_data.id}">********</button>`;
+        div_parent.appendChild(div);
+    }
+} else {
+    console.log("Vous n'êtes pas connecté.");
+    window.location.href = "/login.html";
 }
 
-function create_profile_companie(){
-    let div_parent = document.getElementById("profile-box");
-    let div = document.createElement("div");
-    div.id = "profile";
-    div.innerHTML = "<img src=\"img/profile_"+user_json.id+".png\" alt=\"profile picture\" id=\"picture\">";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_picture_"+user_json.id+"\">modify</button>";
-    div.innerHTML += "<p>Companie Name : " + user_json.name + "</p>";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_name_"+user_json.id+"\">modify</button>";
-    div.innerHTML += "<p>Description : " + user_json.description + "</p>";
-    div.innerHTML += "<button class=\"btn\" id=\"btn_description_"+user_json.id+"\">modify</button>";
-    div_parent.appendChild(div);
-}
 
-create_profile_companie();
