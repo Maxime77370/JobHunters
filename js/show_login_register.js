@@ -95,7 +95,7 @@ loginForm.addEventListener("submit", async (e) => {
             console.log("Connexion réussie !");
                    
           
-            window.location.href = "/search.html";
+            window.location.href = "search.html";
         } else {
             console.log("Erreur lors de la connexion. Veuillez réessayer.");
         }
