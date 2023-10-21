@@ -1,0 +1,125 @@
+@import url(variables.css) all;
+
+.search-bar{
+    display : flex;
+    position: sticky;
+    top: 0; 
+    align-items: center;
+    justify-content: space-around;
+    width: 90vw;
+    padding: 1vh 5vw;
+    background-color: var(--color_main);
+}
+
+.search{
+    border: none;
+    outline: none;
+    padding : 1vw;
+    width : 30vw;
+    height: 3vh;
+    border-radius: 2vh;
+    z-index: 1;
+    box-shadow: var(--box_shadow);
+}
+
+#job-board{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    background-color: var(--color_secondary);
+    padding: 5vh 0;
+}
+
+.job{
+    flex: 100%;
+    padding: 2vh;
+    margin: 2vh;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: var(--box_shadow);
+    max-width: 40vw;
+    overflow: hidden;
+}
+
+
+.job-container{
+    width: 85vw;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 6.5vh;
+}
+
+.mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba( 0, 0, 0, 0.6 );
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 1;
+}
+.min{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.max{
+    width: 35vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.btn{
+    position: relative;
+
+}
+
+
+.title{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.location{
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.wages{
+    width: fit-content;
+    background-color: rgb(189, 189, 189);
+    border-radius: 2vw;
+    padding: 1vw;
+}
+
+
+@media screen and (max-width: 719px) {
+    .job{
+        flex : 100%;
+        flex-direction: column;
+        max-width:40vw;
+        max-height: 40ch;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .job-container{
+        grid-template-columns: 1fr;
+        width: 40vw;
+    }
+
+    #job-board{
+        flex-direction: column;
+    }
+
+    .min{
+        width: 40vw;
+    }
+}

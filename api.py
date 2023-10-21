@@ -200,10 +200,11 @@ def modify_companies(company: Company, id: int):
 @app.post("/modify_users/{id}")
 def modify_users(user: User, id: int):
     try:
+        hashed_password = pwd_context.hash(user.password)
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
         query = "UPDATE users SET username = %s, password = %s, email = %s, phone = %s, role = %s WHERE id = " + str(id)
-        values = (user.username, user.password, user.email, user.phone, user.role)
+        values = (user.username, hashed_password, user.email, user.phone, user.role)
         cursor.execute(query, values)
         conn.commit()
         cursor.close()
@@ -321,6 +322,30 @@ async def login(user: UserLogin):
 @app.post("/logout")
 async def logout():
     return {"message": "Successfully logged out"}
+
+# Route pour vérifier un mot de passe
+@app.post("/verify-pwd")
+async def verify_password(user: UserLogin):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT password FROM users WHERE username = %s"
+        cursor.execute(query, (user.username,))
+        result = cursor.fetchone()
+        cursor.close()
+        conn.close()
+
+        if result:
+            stored_password = result["password"]
+            if pwd_context.verify(user.password, stored_password):
+                return {"message": "Mot de passe valide"}
+            else:
+                raise HTTPException(status_code=401, detail="Mot de passe incorrect")
+        else:
+            raise HTTPException(status_code=404, detail="Utilisateur non trouvé")
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur: {str(e)}")
 
 # vérifier si quelqu'un est d'une entreprise
 def is_entreprise(token: str = Security(oauth2_scheme, scopes=["entreprise"])):

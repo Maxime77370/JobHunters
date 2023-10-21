@@ -1,5 +1,4 @@
 function checkUserRole() {
-    const token = localStorage.getItem("Jeton JWT");
     if (!token) {
         console.error("Aucun token trouvé.")
         window.location.href = "home.html";

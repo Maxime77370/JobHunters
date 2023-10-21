@@ -3,6 +3,11 @@ body_css.rel = "stylesheet";
 body_css.href = "css/profile.css";
 document.body.appendChild(body_css);
 
+const usernameRegex = /^[a-zA-Z0-9]{4,16}$/;
+const passwordRegex = /^(?=.*\d)(?=.*[A-Z]).{8,}$/;
+const phoneRegex = /^\d{10}$/;
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]{2,}\.[a-z]{2,4}$/;
+
 // Fonction pour extraire les données de l'utilisateur depuis le jeton JWT
 function getUserDataFromToken(token) {
     try {
@@ -42,46 +47,108 @@ function profile(token){
 
                 document.getElementById("save-btn").addEventListener("click", async (event) => {
                     event.preventDefault();
-                    const new_user_data =  Object.assign({}, user_data)
-                    delete new_user_data.id;
+                    
+                    // Récupérez les valeurs des champs en utilisant les attributs name
+                    const username = document.getElementById("username").value;
+                    const email = document.getElementById("email").value;
+                    const phone = document.getElementById("phone").value;
+                    const oldPassword = document.getElementById("old-password").value;
+                    let newPassword = document.getElementById("new-password").value;
+                    if (newPassword === "") {
+                        newPassword = oldPassword;
+                    }
 
-                    if (new_user_data.role === "particulier" || new_user_data.role === "admin") {
-                        // Utilisateur particulier, n'ajoutez rien de spécial
-                        keys = ["username", "email", "phone", "password"];
-                        if (document.getElementById("password").value === ""){
-                            delete new_user_data.password;
+                    console.log(username, email, phone, oldPassword, newPassword);
+
+                    if (usernameRegex.test(username) && passwordRegex.test(newPassword) && phoneRegex.test(phone) && emailRegex.test(email)) {
+                    
+                        // Objet pour la vérification du mot de passe
+                        const passwordData = {
+                            username: user_data.username,
+                            password: oldPassword
+                        };
+
+                        console.log(passwordData)
+                    
+                        try {
+                            // Vérifiez l'ancien mot de passe
+                            const response = await fetch("http://localhost:8000/verify-pwd", {
+                                method: "POST",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                                body: JSON.stringify(passwordData),
+                            });
+                    
+                            if (response.ok) {
+                                // La vérification du mot de passe a réussi, vous pouvez maintenant mettre à jour le mot de passe.
+
+                                const newUserData = {
+                                    username: username,
+                                    email: email,
+                                    phone: phone,
+                                    password: newPassword,  // Ajoutez le nouveau mot de passe ici
+                                    role: user_data.role,
+                                };
+
+                                console.log(newUserData)
+                                // Envoyez une nouvelle requête pour mettre à jour l'utilisateur avec le nouveau mot de passe
+                                const updateResponse = await fetch(`http://localhost:8000/modify_users/${user_data.id}`, {
+                                    method: "POST",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(newUserData),
+                                });
+                    
+                                if (updateResponse.ok) {
+                                    console.log("Modification réussie !");
+                                    try {
+                                        const response = await fetch("http://localhost:8000/login", {
+                                            method: "POST",
+                                            headers: {
+                                                "Content-Type": "application/json",
+                                            },
+                                            body: JSON.stringify({username: username, password: newPassword}),
+                                        });
+                                
+                                        if (response.ok) {
+                                            const data = await response.json();
+                                            // Stockage du jeton JWT dans le stockage local (localStorage)
+                                            localStorage.setItem("Jeton JWT", data.token);
+                                            console.log("Connexion réussie !");
+                                        } else {
+                                            console.log("Erreur lors de la connexion. Veuillez réessayer.");
+                                        }
+                                    } catch (error) {
+                                        console.error("Erreur :", error);
+                                        console.log("Une erreur s'est produite lors de la connexion. Veuillez réessayer.");
+                                    }
+                                    window.location.href = "profile.html";
+                                } else {
+                                    console.log("Erreur lors de la modification. Veuillez réessayer.");
+                                }
+                            } else {
+                                console.log("Ancien mot de passe incorrect. La modification a échoué.");
+                            }
+                        } catch (error) {
+                            console.error("Erreur :", error);
+                            console.log("Une erreur s'est produite lors de la modification. Veuillez réessayer.");
                         }
                     }
                     else{
-                        keys = ["username", "email", "phone", "companie", "description", "password"];
-                        if (document.getElementById("password").value === ""){
-                            delete new_user_data.password;
+                        if (!passwordRegex.test(newPassword) && !newPassword === "" ){
+                            document.getElementById("error-popup-password").style.display = "block";
                         }
-                    }
-                    for (key of keys) {
-                        console.log(key);
-                        new_user_data[key] = document.getElementById(key).value;
-                    }
-
-                    try {
-                        console.log(user_data)
-                        const response = await fetch("http://localhost:8000/modify_users/"+user_data.id, {
-                            method: "POST",
-                            headers: {
-                                "Content-Type": "application/json",
-                            },
-                            body: JSON.stringify(new_user_data),
-                        });
-
-                        if (response.ok) {
-                            console.log("Modification réussie !");
-                            window.location.href = "profile.html";
-                        } else {
-                            console.log("Erreur lors de la modification. Veuillez réessayer.");
+                        if (!phoneRegex.test(phone)){
+                            document.getElementById("error-popup-phone").style.display = "block";
                         }
-                    } catch (error) {
-                        console.error("Erreur :", error);
-                        console.log("Une erreur s'est produite lors de la modification. Veuillez réessayer.");
+                        if (!usernameRegex.test(username)){
+                            document.getElementById("error-popup-username").style.display = "block";
+                        }
+                        if (!emailRegex.test(email)){
+                            document.getElementById("error-popup-email").style.display = "block";
+                        }
                     }
                 });
             });
@@ -123,8 +190,12 @@ function show_modifier(user_data){
     div = document.getElementById("profile");
     div.innerHTML = `<img src="img/profile_1.png" alt="profile picture" id="picture">`;
     div.innerHTML += `<p>Username : <input type="text" id="username" value="${user_data.username}"></input></p>`;
+    div.innerHTML += "<p id=\"error-popup-username\" style=\"color : red ; display : none;\">Username must be between 4 and 16 characters long and contain only letters and numbers.</p>";
     div.innerHTML += `<p>Email : <input type="text" id="email" value="${user_data.email}"></input></p>`;
+    div.innerHTML += "<p id=\"error-popup-email\" style=\"color : red ; display : none;\">Email must be valid.</p>";
+
     div.innerHTML += `<p>Phone : <input type="text" id="phone" value="${user_data.phone}"></input></p>`;
+    div.innerHTML += "<p id=\"error-popup-phone\" style=\"color : red ; display : none;\">Phone must be 10 characters long and contain only numbers.</p>";
     
     if (user_data.role === "particulier") {
         // Utilisateur particulier, n'ajoutez rien de spécial.
@@ -134,7 +205,9 @@ function show_modifier(user_data){
         div.innerHTML += `<p>Description : <input type="text" value="${user_data.description}"></input></p>`;
     }
 
-    div.innerHTML += `<p>Password : <input type="text" id="password"></input></p>`;
+    div.innerHTML += `<p>Old Password (Obligatory): <input type="text" id="old-password"></input></p>`;
+    div.innerHTML += `<p>New Password (no change if empty): <input type="text" id="new-password"></input></p>`;
+    div.innerHTML += "<p id=\"error-popup-password\" style=\"color : red ; display : none;\">Password must be at least 8 characters long, contain at least one number and one uppercase letter.</p>";
     
     let save_btn = document.createElement("button");
     save_btn.classList.add("btn");

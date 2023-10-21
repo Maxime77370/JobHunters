@@ -58,7 +58,7 @@ registerForm.addEventListener("submit", async (e) => {
 
             if (response.ok) {
                 console.log("Inscription réussie ! Vous pouvez maintenant vous connecter.");
-                window.location.href = "/search.html";
+                window.location.href = "search.html";
             } else {
                 console.log("Erreur lors de l'inscription. Veuillez réessayer.");
             }

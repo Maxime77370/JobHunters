@@ -9,6 +9,7 @@
     width: 90vw;
     padding: 1vh 5vw;
     background-color: var(--color_main);
+    z-index: 1;
 }
 
 .search{
