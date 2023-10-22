@@ -1,6 +1,6 @@
 # T-WEB-501-LIL_3
 
-[![forthebadge]([http://forthebadge.com/images/badges/built-with-love.svg](https://forthebadge.com/images/badges/made-with-python.svg))](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)  [![forthebadge](http://forthebadge.com/images/badges/powered-by-electricity.svg)](http://forthebadge.com)
 
 Une petite description du projet
 
