@@ -2,7 +2,7 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](http://forthebadge.com)  [![forthebadge](https://forthebadge.com/images/badges/uses-html.svg)](http://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/uses-css.svg)](http://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/made-with-javascript.svg)](http://forthebadge.com)
 
-Une petite description du projet
+Notre but est de créer un site internet sui regroupe des offres d'emplois pour que les employeur puisse déposer leurs offres d'emplois et que les personnes qui en sont a la cherche puisse poster pour plus facilement trouver un emploie.
 
 ## Pour commencer
 
