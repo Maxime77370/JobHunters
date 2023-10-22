@@ -256,7 +256,7 @@ async function apply_advertisment(jobId) {
     ];
 
     // Vérifier si le jeton JWT est présent dans le localStorage
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = localStorage.getItem('Jeton JWT');
 
     if (jwtToken) { // Si l'utilisateur est connecté
         fields.forEach((fieldData) => {
