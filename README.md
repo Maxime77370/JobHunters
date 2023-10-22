@@ -6,7 +6,7 @@ Notre but est de créer un site internet sui regroupe des offres d'emplois pour 
 
 ## Pour commencer
 
-Entrez ici les instructions pour bien débuter avec votre projet...
+Le projet est séparé en deux, un coté back et un coté front, nous sommes un équipe de trois personne donc il y a une personne en back un en front et une qui s'aoccupe des deux partie.
 
 ### Pré-requis
 
