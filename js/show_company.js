@@ -44,7 +44,7 @@ function getUserDataFromToken(token) {
 
 async function init_company(){
     user_data = getUserDataFromToken(token);
-    console.log(user_data)
+
     try{
         const response = await fetch("http://localhost:8000/get_company_owned/" + user_data.id, {
             method: "GET",
@@ -249,8 +249,13 @@ async function displayJobDetails(job_id, company_id) {
         btn_show_applicants.id = "btn_show_applicants_" + job_id;
         btn_show_applicants.innerHTML = "Voir les candidats";
 
+        const btn_delete_job = document.createElement("button");
+        btn_delete_job.id = "btn_delete_job_" + job_id;
+        btn_delete_job.innerHTML = "Supprimer";
+
         div_job.appendChild(btn_edit_job);
         div_job.appendChild(btn_show_applicants);
+        div_job.appendChild(btn_delete_job);
         company_advertisement.appendChild(div_job);
 
         document.getElementById(`btn_edit_job_${job_id}`).addEventListener("click", () => {
@@ -259,6 +264,25 @@ async function displayJobDetails(job_id, company_id) {
 
         document.getElementById(`btn_show_applicants_${job_id}`).addEventListener("click", () => {
             showAplicants(job_id);
+        });
+
+        document.getElementById(`btn_delete_job_${job_id}`).addEventListener("click", async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/delete/job_advertisements/${job_id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    document.getElementById("job_"+job_id).remove();
+                } else {
+                    console.error("Erreur lors de la suppression:", response.statusText);
+                }
+            } catch (error) {
+                console.error("Erreur :", error);
+            }
         });
     }
 }
@@ -317,7 +341,6 @@ async function editJobDetails(job_id, job_data, company_id) {
 }
 
 async function add_job(company_id){
-    
     const form_create_job = document.getElementById
     ("form-add-advertisement");
     document.getElementById("main-box-ann").style.display = "block";
@@ -325,7 +348,6 @@ async function add_job(company_id){
     form_create_job.addEventListener("submit", async (e) => {
         e.preventDefault();
         try {
-
             const response = await fetch("http://localhost:8000/create_job_advertisements", {
                 method: "POST",
                 headers: {
@@ -335,7 +357,7 @@ async function add_job(company_id){
                     title: form_create_job.nom.value,
                     description: form_create_job.description.value, 
                     full_description: form_create_job.full_description.value, 
-                    wages: parseFloat(form_create_job.remuneration.value), //conversion en float
+                    wages: parseFloat(form_create_job.remuneration.value), // Convert to float
                     location: form_create_job.lieu.value,
                     working_time: form_create_job.horaire.value,
                     company_id: company_id,
@@ -344,10 +366,6 @@ async function add_job(company_id){
         } catch (error) {
             console.error("Erreur:", error);
         }
-        
-    });
-    document.getElementById("exit-add").addEventListener("click",  (e) =>{
-        form_create_job.style.display = "none";
     });
 }
 
@@ -363,10 +381,19 @@ async function showAplicants(job_id){
         if (reponse.ok){
             data = await reponse.json();
             console.log(data);
-
+            apply.innerHTML="";
+            apply.style.display = "block";
             data.forEach(async element => {
-                displayAplicants(element.id);
+                 displayAplicants(element.id);
             });
+            btn_exit = document.createElement("button");
+            btn_exit.innerHTML = "Sortir";
+            apply.appendChild(btn_exit);
+            btn_exit.addEventListener("click", async (e) => {
+                apply.innerHTML="";
+                apply.style.display = "none";
+            });
+
         }
     }
     catch(error){

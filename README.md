@@ -1,19 +1,45 @@
-# T-WEB-501-LIL_3
+# JobHunters
+
+JobHunters is a project similar to Indeed, used to apply for jobs and create companies and job advertisements
 
 
-------------- 09/10/23 ---------------------
+## Languages
 
-[+]  Ajout de la structure front : 
-  -  Search, about, contact, home, profile .html
-  -  style, search .css
-  -  show_job.js
-  -  responsive done
-  -  ajout d'une fonction d'incrémentation de div en fonction des ads ajoutés
+This website is built with Javascript, Python, CSS and HTML. No PHP is required. No framework as well 😎
 
-[+] Implémentation de l'API (Laravel) :
-  - Gestion de la base de données donnée par laravel-5.2 ( PHP 7.4.3 )
-  - Configuration de l'env pour route la bdd ( localhost / 3306 )
 
-[+] Installation de la BDD (MySQL) :
-  - Users, job_advertisements, companies, job_applications
-  - ajout des clés primaires (id) et étrangères (references)
+## SQL 
+
+Use the "jobboard.sql" file and change it as you wish
+
+## Installation
+
+Use the "requirements.txt file"  to install packages.
+
+```bash
+pip install -r requirements.txt
+```
+
+## Database Usage
+
+```python
+db_config = {
+    "host": "hostname",
+    "user": "db_user",
+    "password": "db_pwd",
+    "database": "db_name"
+}
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://your_hostname"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+```
+
+
+## Contributing
+
+Made with love by Benjamin, Maxime and Edwin

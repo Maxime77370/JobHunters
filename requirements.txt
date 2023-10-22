@@ -1,0 +1,9 @@
+pip install pydantic
+pip install bcrypt
+pip install python-jose[cryptography]
+pip install passlib
+pip install python-multipart
+pip install mysql-connector-python
+pip install fastapi
+pip install uvicorn
+pip install python-dotenv

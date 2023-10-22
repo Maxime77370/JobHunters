@@ -2,7 +2,6 @@
 
 #main-box-ann{
     display: none;
-    background-color: var(--color_secondary);
 }
 
 .title{
@@ -94,6 +93,17 @@ button:hover {
     border-radius: 2vh;
 }
 
+#form-add-advertisement{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 5vh ;
+    margin: 5vh ;
+    border-radius: 2vh;
+}
+
 .job{
     flex: 100%;
     padding: 2vh;
@@ -103,4 +113,18 @@ button:hover {
     box-shadow: var(--box_shadow);
     max-width: 40vw;
     overflow: hidden;
+}
+
+#show-apply{
+    background-color: white;
+    border-radius: 5px;
+    height: 50vh;
+    overflow: scroll;
+    top: 20vh;
+    margin: 2vh;
+    padding: 2vh;
+    display: none;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
 }
