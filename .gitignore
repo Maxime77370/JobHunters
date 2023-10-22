@@ -2,4 +2,4 @@ __pycache__/
 vendor/
 composer.lock
 composer.json
-Makefile
+makefile
