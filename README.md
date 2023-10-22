@@ -10,15 +10,15 @@ Le projet est séparé en deux, un coté back et un coté front, nous sommes un 
 
 ### Pré-requis
 
-Ce qu'il est requis pour commencer avec votre projet...
+Les pré-requis pour commencer notre projet sont :
 
-- Programme 1
-- Programme 2
-- etc...
+-faire un trello pour savoir qui s'occupe de quoi, savoir ce qui est deja fais, et ce qu'il reste.
+-un figma qui est un editeur graphique utiliser pour faire des croquis afin de ce faire une idée du resultas de notre site web.
+-se renseigner sur les technologie que nous allons utiliser.
 
 ### Installation
 
-Les étapes pour installer votre programme....
+-si vous etes sur windows vous devez installer wamp, wamp nous permet d'hberger  d'avoir une base de donnée et de gérer des requete 
 
 Dites ce qu'il faut faire...
 
