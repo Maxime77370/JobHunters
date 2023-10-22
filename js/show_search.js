@@ -99,12 +99,12 @@ async function creat_job_advertisement(id , count_job) {
             // Créez un bouton "Apply" et ajoutez un gestionnaire d'événements
             let applyButton = document.createElement("button");
             applyButton.className = "btn";
-            applyButton.textContent = "Apply";
+            applyButton.textContent = "Postuler";
             applyButton.id = "btn_apply_" + count_job;
 
             let showButton = document.createElement("button");
             showButton.className = "btn";
-            showButton.textContent = "Show";
+            showButton.textContent = "Voir plus";
             showButton.id = "btn_show_" + count_job;
 
             // Gestionnaire d'événements pour le bouton "Apply" (exemple)
@@ -118,7 +118,7 @@ async function creat_job_advertisement(id , count_job) {
                 job.classList.add("job-full");
                 if (body.offsetWidth < 719) {
                     job.style.transition = "all 0.5s";
-                    job.style.maxHeight = "80vh";
+                    job.style.maxHeight = "150vh";
                 }
                 else{
                     console.log(count_job, all_job.length);
@@ -235,78 +235,54 @@ async function sendApplicationData(jobId, motivationLetter) {
     }
 }
 
-
-
-
 async function apply_advertisment(jobId) {
-    // Créer le formulaire
-    const user_id = getUserIdFromToken(token);
-
     const main_post = document.createElement("div");
     main_post.className = "main-box-post";
-
-    if (!user_id) { // Si l'utilisateur n'est pas connecté
-        const notConnectedBox = document.createElement("div");
-        notConnectedBox.innerHTML = `
-            <p>Vous devez être connecté pour postuler à cette offre.</p>
-            <button id="btnConnecter">Se connecter</button>
-        `;
-
-        notConnectedBox.querySelector("#btnConnecter").addEventListener("click", () => {
-            window.location.href = "/login"; // Redirige vers la page de connexion
-        });
-
-        main_post.appendChild(notConnectedBox);
-        document.body.appendChild(main_post);
-        return; // Termine la fonction ici si l'utilisateur n'est pas connecté
-    } else {
-
 
     const form = document.createElement("form");
     form.className = "postule";
 
-    // Créer la div avec la classe "title"
     const titleDiv = document.createElement("div");
     titleDiv.className = "title";
 
-    // Créer le titre "Apply"
     const title = document.createElement("h1");
-    title.textContent = "Apply";
+    title.textContent = "Postuler";
 
-    // Créer la div avec la classe "post-box"
     const postBoxDiv = document.createElement("div");
     postBoxDiv.className = "post-box";
 
-    // Créer les champs du formulaire
     const fields = [
         { label: "Lettre de Motivation :", type: "textarea", id: "a_propos", name: "a_propos", placeholder: "Entrez une lettre de motivation", rows: 8, required: true }
     ];
 
-    // Créer les champs du formulaire
-    fields.forEach((fieldData) => {
-        const label = document.createElement("label");
-        label.textContent = fieldData.label;
+    // Vérifier si le jeton JWT est présent dans le localStorage
+    const jwtToken = localStorage.getItem('jwtToken');
 
-        let input;
-        if (fieldData.type === "textarea") {
-            input = document.createElement("textarea");
-            input.rows = fieldData.rows || 4; // Par défaut, 4 lignes
-        } else {
-            input = document.createElement("input");
-            input.type = fieldData.type;
-        }
+    if (jwtToken) { // Si l'utilisateur est connecté
+        fields.forEach((fieldData) => {
+            const label = document.createElement("label");
+            label.textContent = fieldData.label;
 
-        input.id = fieldData.id;
-        input.name = fieldData.name;
-        input.placeholder = fieldData.placeholder;
-        input.required = fieldData.required;
+            let input;
+            if (fieldData.type === "textarea") {
+                input = document.createElement("textarea");
+                input.rows = fieldData.rows || 4; // Par défaut, 4 lignes
+            } else {
+                input = document.createElement("input");
+                input.type = fieldData.type;
+            }
 
-        // Ajouter le label et l'input à la div "post-box"
-        postBoxDiv.appendChild(label);
-        postBoxDiv.appendChild(input);
+            input.id = fieldData.id;
+            input.name = fieldData.name;
+            input.placeholder = fieldData.placeholder;
+            input.required = fieldData.required;
 
-    
-    });
+            postBoxDiv.appendChild(label);
+            postBoxDiv.appendChild(input);
+        });
+
+        form.appendChild(postBoxDiv); // Ajout de la div postBox seulement si jwtToken est présent
+    }
 
     let exitButton = document.createElement("button");
     exitButton.className = "btn";
@@ -317,15 +293,27 @@ async function apply_advertisment(jobId) {
         main_post.remove();
     });
 
-    // Créer le bouton "Envoyer"
     const submitButton = document.createElement("button");
     submitButton.type = "submit";
-    submitButton.textContent = "Envoyer";
 
-    // Ajouter le titre, la div "post-box" et le bouton au formulaire
+    if (!jwtToken) { // Si l'utilisateur n'est pas connecté
+        submitButton.textContent = "Se connecter";
+        submitButton.addEventListener("click", (event) => {
+            event.preventDefault();
+            window.location.href = "login.html"; // Redirige vers la page de connexion
+        });
+    } else { // Si l'utilisateur est connecté
+        submitButton.textContent = "Envoyer";
+        submitButton.addEventListener("click", async (event) => {
+            event.preventDefault();
+            const motivationLetter = document.getElementById("a_propos").value;
+            await sendApplicationData(jobId, motivationLetter);
+            main_post.remove();
+        });
+    }
+
     titleDiv.appendChild(title);
     form.appendChild(titleDiv);
-    form.appendChild(postBoxDiv);
     form.appendChild(submitButton);
     form.appendChild(exitButton);
 
@@ -335,18 +323,8 @@ async function apply_advertisment(jobId) {
 
     exitButton.style = "top: " + form.offsetTop + "px; left: " + form.offsetWidth + "px; position: absolute;";
 
-    submitButton.addEventListener("click", async (event) => {
-        event.preventDefault(); // Empêche la soumission par défaut du formulaire
-
-        const motivationLetter = document.getElementById("a_propos").value;
-        await sendApplicationData(jobId, motivationLetter);
-        main_post.remove();
-
-
-    });
     return form;
-}}
-
+}
 
 // Fonction pour effectuer la recherche
 function performSearch() {
