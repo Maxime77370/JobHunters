@@ -1,15 +1,46 @@
 @import url("variables.css") all;
 
-:root{
-    --box_width : 50ch;
-    --box_height : 40ch;
+:root {
+    --box_width: 50ch;
+    --box_height: 40ch;
 }
 
-form{
+form {
     display: flex;
     flex-direction: column;
     justify-content: center;
+}
 
+input, textarea {
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 2px solid #ccc;
+    border-radius: 3px;
+    box-shadow: 2px 2px 2px var(--color_main) ;
+    border-radius: 2vh;
+
+}
+
+.login-box {
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+    border-radius: 5px;
+    padding: 2vw;
+    background-color: none;
+    position: fixed;
+    top: 13vh;
+    flex-grow: 5vh;
+}
+
+.login-button {
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+}
+
+.login-button button {
+    margin: 0 10px;
 }
 
 .regi {
@@ -19,6 +50,7 @@ form{
     grid-template-columns: 1fr 1fr;
     grid-gap: 2vh;
 }
+
 
 .btn3 {
     background-color: rgb(237, 237, 237);
@@ -30,33 +62,46 @@ form{
     transition: all 0.5s;
 }
 
+.btn3:hover {
+    background-color: white;
+    align-items: center;
+}
 .btn3.selected {
     background-color: rgb(41, 72, 226);
     color: white;
 }
 
-.btn3:hover {
-    background-color: rgb(41, 72, 226);
-    align-items: center;
-}
 
 .error.popup {
-        display: none; /* Caché par défaut */
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.6); /* Arrière-plan semi-transparent */
-        z-index: 1000; /* Mettez une valeur élevée pour s'assurer que la popup est au-dessus de tout le reste */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 18px;
-    }
+    display: none;
+    /* Caché par défaut */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    /* Arrière-plan semi-transparent */
+    z-index: 1000;
+    /* Mettez une valeur élevée pour s'assurer que la popup est au-dessus de tout le reste */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+}
+
+.box-flip-container {
+    display: flex;
+    padding: 2vw;
+    position: fixed;
+    top: 20vh;
+    min-height: 100vh;
+    /* Ajustez la hauteur minimale selon vos besoins */
+}
 
 .flip-container {
+    padding: 2vh;
     perspective: 1000px;
     width: var(--box_width);
     height: var(--box_height);
@@ -70,7 +115,8 @@ form{
     transition: transform 0.5s;
 }
 
-.front, .back {
+.front,
+.back {
     width: 100%;
     height: 100%;
     position: absolute;
@@ -79,21 +125,78 @@ form{
 
 .front {
     background-color: white;
-    border-radius: 2vh;
-    padding: 2vh;
+    border-radius: 2.5vh;
+    padding: 3vh;
     height: auto;
 }
 
 .back {
     background-color: white;
-    border-radius: 2vh;
+    border-radius: 2.5vh;
     padding: 2vh;
     transform: rotateY(180deg);
     height: auto;
+    
 }
 
+.connec-button {
+    display: flex;
+    flex-direction: center;
+    justify-content: center;
+
+}
+
+.connec-button button {
+    margin: 25px 120px;
+}
+
+
 @media screen and (max-width: 719px) {
+
     .regi {
-        grid-template-columns: 1fr;
+       grid-template-columns: 1fr 1fr;
     }
+
+    .form-regi {
+        max-height: 63vh;
+    } 
+
+    .login-box {
+        top: 16vh;
+    }
+
+    .box-flip-container {
+        min-height: 70vh;
+        /* Ajustez la hauteur minimale selon vos besoins */
+    }
+
+    .front {
+        width:72%;
+        margin-left: 5vh;
+    }
+
+    .back {
+        width: 78%;
+        margin-left: 5vh;
+    }
+
+    .connec-button button {
+        margin: 25px 60px;
+    }
+
+}
+
+@media screen and (max-width: 375px) {
+
+    .front {
+        width:72%;
+        margin-left: 5.5vh;
+    }
+
+    .back {
+        width: 78%;
+        margin-left: 5vh;
+    }
+
+
 }

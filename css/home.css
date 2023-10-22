@@ -2,25 +2,36 @@
 
 .main-box-home {
     width: 90vw;
-    background-color: var(--color_secondary);
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     grid-gap: 5vw;
     padding: 5vw;
-    overflow-x: hidden;
+    
+}
 
+.name-box{
+    font-family: 'Pacifico', cursive;
+    font-size: 48px;
 }
 
 .big-box {
-    margin-right: 20%;
+    display: grid;
+    grid-column: 1/4;
     border-radius: 5px;
     padding: 2vw;
     background-color: white;
     box-shadow: var(--box_shadow);
-
 }
 
 .box {
+    background-color: white;
+}
+
+.box-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-color: white;
 }
 
@@ -32,11 +43,32 @@
     box-shadow: var(--box_shadow);
 }
 
+button {
+    background-color: rgb(237, 237, 237);
+    padding: 2vh;
+    width: 15vh;
+    border-radius: 2vh;
+    align-self: center;
+    justify-content: center;
+    transition: all 0.5s;
+}
+
+button:hover {
+    background-color: rgb(255, 255, 255);
+    box-shadow: var(--box_shadow);
+}
+
 @media screen and (max-width: 1280px) {
     .main-box-home {
         grid-template-columns: 1fr;
     }
     .big-box{
         margin-right: 5vw;
+    }
+    .long-box{
+        box-shadow: none;
+    }
+    .name-box{
+        font-size: 18px;
     }
 }

@@ -10,12 +10,40 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 import logging
 
+tags_metadata = [
+    {
+        "name": "Authentification",
+        "description": "Toutes les opérations liées à l'authentification."
+    },
+    {
+        "name": "Users",
+        "description": "Gérer les utilisateurs."
+    },
+    {
+        "name": "Companies",
+        "description": "Opérations liées aux entreprises."
+    },
+    {
+        "name": "Job Advertisements",
+        "description": "Opérations liées aux annonces d'emploi."
+    },
+    {
+        "name": "Job Applications",
+        "description": "Opérations liées aux candidatures."
+    },
+    {
+        "name": "Generic Operations",
+        "description": "Opérations génériques pour obtenir et supprimer des données."
+    },
+]
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-app = FastAPI(debug=True)
+app = FastAPI(openapi_tags=tags_metadata)
 
 # Configuration de hachage des mots de passe
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # Génération du jeton JWT
 def generate_token(data: dict):
@@ -25,19 +53,25 @@ def generate_token(data: dict):
     encoded_jwt = jwt.encode(to_encode, "0000", algorithm="HS256")  # Remplacez "YOUR_SECRET_KEY" par votre propre clé secrète
     return encoded_jwt
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+# Vérification du jeton JWT
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    try:
+        user_data = jwt.decode(token, "0000", algorithms=["HS256"])
+        return user_data
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Could not validate credentials")
 
+# Configuration de la base de données
 db_config = {
     "host": "127.0.0.1",
-    "port": "8889",
     "user": "root",
-    "password": "root",
+    "password": "",
     "database": "jobboard"
 }
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:8888"],
+    allow_origins=["http://jobboard"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -103,7 +137,7 @@ class Token(BaseModel):
     user_data: str
     token_type: str
 
-@app.post("/create_job_advertisements")
+@app.post("/create_job_advertisements", tags=["Job Advertisements"])
 def create_job_advertisements(job_advertisement: Advertisement):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -119,7 +153,7 @@ def create_job_advertisements(job_advertisement: Advertisement):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
 
-@app.post("/create_companies")
+@app.post("/create_companies", tags=["Companies"])
 def create_companies(company: Company):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -135,7 +169,7 @@ def create_companies(company: Company):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
     
-@app.post("/create_users", response_model=User)
+@app.post("/create_users", tags=["Users"], response_model=User)
 def register(user: UserRegister):
     try:
         hashed_password = pwd_context.hash(user.password)
@@ -151,7 +185,7 @@ def register(user: UserRegister):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
     
-@app.post("/create_job_applications")
+@app.post("/create_job_applications", tags=["Job Applications"])
 def create_job_applications(job_application: JobApplication):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -166,23 +200,8 @@ def create_job_applications(job_application: JobApplication):
         return {"message": "Job application created successfully", "id": created_id}
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
-
-@app.post("/modify_job_advertisements/{id}")
-def modify_job_advertisements(job_advertisement: Advertisement, id: int):
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        query = "UPDATE job_advertisements SET title = %s, description = %s, full_description = %s, wages = %s, location = %s, working_time = %s, company_id = %s WHERE id = " + str(id)
-        values = (job_advertisement.title, job_advertisement.description, job_advertisement.full_description, job_advertisement.wages, job_advertisement.location, job_advertisement.working_time, job_advertisement.company_id)
-        cursor.execute(query, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return {"message": "Advertisement modified successfully"}
-    except Exception as e:
-        return {"message": f"Error: {str(e)}"}
-    
-@app.post("/modify_companies/{id}")
+ 
+@app.post("/modify_companies/{id}", tags=["Companies"])
 def modify_companies(company: Company, id: int):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -197,7 +216,77 @@ def modify_companies(company: Company, id: int):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
     
-@app.post("/modify_users/{id}")
+@app.get("/get_company_owned/{id_owner}", tags=["Companies"])
+def get_company_owned(id_owner: str):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT id FROM companies WHERE owner_id =  " + id_owner
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        if result:
+            return result
+        else:
+            raise HTTPException(status_code=404, detail="Advertisements not found")
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+    
+@app.get("/get_company_id_job", tags=["Companies"])
+def get_id_table():
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT company_id FROM job_advertisements"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        if result:
+            return result
+        else:
+            raise HTTPException(status_code=404, detail="Advertisements not found")
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+    
+@app.get("/get_id_by_advertisement/{job_id}", tags=["Job Applications"])
+def get_id_table_by_user(job_id: int):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        # Assurez-vous que le nom de la colonne est 'user_id' dans la table souhaitée.
+        query = f"SELECT id FROM job_applications WHERE job_advertisement_id = {job_id}"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        if result:
+            return result
+        else:
+            raise HTTPException(status_code=404, detail="Advertisements not found for the given user_id")
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+
+@app.get("/get_id_by_company/{id_company}", tags=["Companies"])
+def get_id_by_company(id_company: str):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        query = "SELECT id FROM job_advertisements WHERE company_id =  " + id_company
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        if result:
+            return result
+        else:
+            raise HTTPException(status_code=404, detail="Advertisements not found")
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+
+@app.post("/modify_users/{id}", tags=["Users"])
 def modify_users(user: User, id: int):
     try:
         hashed_password = pwd_context.hash(user.password)
@@ -212,23 +301,8 @@ def modify_users(user: User, id: int):
         return {"message": "User modified successfully"}
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
-    
-@app.post("/modify_job_applications/{id}")
-def modify_job_applications(job_application: JobApplication, id: int):
-    try:
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        query = "UPDATE job_applications SET user_id = %s, job_advertisement_id = %s, message = %s WHERE id = " + str(id)
-        values = (job_application.user_id, job_application.job_advertisement_id, job_application.message)
-        cursor.execute(query, values)
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return {"message": "Job application modified successfully"}
-    except Exception as e:
-        return {"message": f"Error: {str(e)}"}
-    
-@app.delete("/delete/{table}/{id}")
+ 
+@app.delete("/delete/{table}/{id}", tags=["Generic Operations"])
 def delete(table: str, id: int):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -244,7 +318,7 @@ def delete(table: str, id: int):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
 
-@app.get("/get_table/{table}/{id}")
+@app.get("/get_table/{table}/{id}", tags=["Generic Operations"])
 def get_table(table: str, id: int):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -261,7 +335,7 @@ def get_table(table: str, id: int):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
 
-@app.get("/get_id_table/{table}")
+@app.get("/get_id_table/{table}", tags=["Generic Operations"])
 def get_id_table(table: str):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -278,7 +352,26 @@ def get_id_table(table: str):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
 
-@app.get("/get_key_table/{table}")
+@app.get("/get_id_table_by_user/{table}/{user_id}", tags=["Job Applications"])
+def get_id_table_by_user(table: str, user_id: int):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor(dictionary=True)
+        # Assurez-vous que le nom de la colonne est 'user_id' dans la table souhaitée.
+        query = f"SELECT id FROM {table} WHERE user_id = {user_id}"
+        cursor.execute(query)
+        result = cursor.fetchall()
+        cursor.close()
+        conn.close()
+        
+        if result:
+            return result
+        else:
+            raise HTTPException(status_code=404, detail="Advertisements not found for the given user_id")
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+
+@app.get("/get_key_table/{table}", tags=["Generic Operations"])
 def get_key_table(table: str):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -296,7 +389,7 @@ def get_key_table(table: str):
         return {"message": f"Error: {str(e)}"}
 
 # Route de connexion avec vérification des informations d'identification
-@app.post("/login")
+@app.post("/login", tags=["Authentification"])
 async def login(user: UserLogin):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -319,12 +412,12 @@ async def login(user: UserLogin):
         raise HTTPException(status_code=500, detail=f"Error: {str(e)}")
 
 # Route pour se déconnecter et supprimer le token du Local Storage
-@app.post("/logout")
+@app.post("/logout", tags=["Authentification"])
 async def logout():
     return {"message": "Successfully logged out"}
 
 # Route pour vérifier un mot de passe
-@app.post("/verify-pwd")
+@app.post("/verify-pwd", tags=["Authentification"])
 async def verify_password(user: UserLogin):
     try:
         conn = mysql.connector.connect(**db_config)
@@ -347,32 +440,19 @@ async def verify_password(user: UserLogin):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur: {str(e)}")
 
-# vérifier si quelqu'un est d'une entreprise
-def is_entreprise(token: str = Security(oauth2_scheme, scopes=["entreprise"])):
-    user_data = generate_token(token)
-    if user_data and user_data.get("role") == "entreprise":
-        return True
-    return False
-
-# vérifier si quelqu'un est un "admin"
-def is_admin(token: str = Depends(oauth2_scheme)):
-    user_data = generate_token(token)
-    if user_data and user_data.get("role") == "admin":
-        return True
-    return False
-
-# route pour permette au role entreprise d'accèder à la page des annonces d'emploi job_ads.html
-@app.get("/job_ads")
-def job_ads_page(is_entreprise: bool = Depends(is_entreprise)):
-    if is_entreprise:
-        return {"message": "Bienvenue sur la page des annonces d'emploi pour les entreprises"}
-    else:
-        raise HTTPException(status_code=403, detail="Accès refusé")
-    
-# route pour permette au role admin d'accèder à la page admin.html
-@app.get("/admin")
-def admin_page(is_admin: bool = Depends(is_admin)):
-    if is_admin:
-        return {"message": "Bienvenue sur la page admin"}
-    else:
-        raise HTTPException(status_code=403, detail="Accès refusé")
+@app.post("/apply_for_job", tags=["Job Applications"])
+def apply_for_job(job_application: JobApplication, user_data: dict = Depends(get_current_user)):
+    try:
+        user_id = user_data.get("id")
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        query = "INSERT INTO job_applications (user_id, job_advertisement_id, message) VALUES (%s, %s, %s)"
+        values = (user_id, job_application.job_advertisement_id, job_application.message)
+        cursor.execute(query, values)
+        conn.commit()
+        created_id = cursor.lastrowid
+        cursor.close()
+        conn.close()
+        return {"message": "Job application created successfully", "id": created_id}
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}

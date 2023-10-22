@@ -203,7 +203,39 @@ async function creat_job_advertisement(id , count_job) {
 
 }
 
-async function apply_advertisment(id) {
+
+async function sendApplicationData(jobId, motivationLetter) {
+   const user_id = getUserIdFromToken(token);
+    try {
+        const applicationData = {
+            job_advertisement_id: jobId,
+            message: motivationLetter,
+            user_id: user_id,
+            // Vous pouvez ajouter d'autres informations ici si nécessaire
+        };
+
+        const response = await fetch("http://localhost:8000/apply_for_job", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": 'Bearer ' + token
+            },
+            body: JSON.stringify(applicationData),
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log("Data sent successfully:", responseData);
+            // Vous pouvez ajouter une logique pour afficher un message de confirmation à l'utilisateur
+        } else {
+            console.error("Erreur lors de l'envoi des données :", await response.text());
+        }
+    } catch (error) {
+        console.error("Erreur lors de l'envoi des données :", error);
+    }
+}
+
+async function apply_advertisment(jobId) {
     // Créer le formulaire
     const main_post = document.createElement("div");
     main_post.className = "main-box-post";
@@ -281,10 +313,19 @@ async function apply_advertisment(id) {
 
     exitButton.style = "top: " + form.offsetTop + "px; left: " + form.offsetWidth + "px; position: absolute;";
 
+    submitButton.addEventListener("click", async (event) => {
+        event.preventDefault(); // Empêche la soumission par défaut du formulaire
+
+        const motivationLetter = document.getElementById("a_propos").value;
+        await sendApplicationData(jobId, motivationLetter);
 
 
+
+
+    });
     return form;
 }
+
 
 // Fonction pour effectuer la recherche
 function performSearch() {

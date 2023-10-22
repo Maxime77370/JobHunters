@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/login.css">
     <title>Connexion / Inscription</title>
@@ -12,60 +15,65 @@
 <body>
     <header id="header">
     </header>
-    <div id="fade"></div>
-    <main class="main-box-login">
-        <div class="flip-container">
-            <div class="flipper">
-                <div class="front">
-                    <form class="form-sign" id="login-form" action="login.php" method="post">
-                        <h2>Connexion</h2>
-                        <div class="regi">
-                            <label for="login-username">Nom d'utilisateur :</label>
-                            <input type="text" id="login-username" name="username" required>
-        
-                            <label for="login-password">Mot de passe :</label>
-                            <input type="password" id="login-password" name="password" required>
-                        </div>
-                        <br>
-                        <button class="btn3" type="submit" style="flex: 2;">Se connecter</button>
-                    </form>
-                </div>
-                <div class="back">
-                    <form class="form-regi" id="register-form">
-                        <div id="error-popup" class="error-popup">
-                            <p> Le mot de passe doit contenir au moins une majuscule, un chiffre, et doit contenir 8 caractères.</p>
-                        </div>
-                        <h2>Inscription</h2>
-                        <div class="regi">
-                            <button class="btn3" type="button" id ="btn-particulier" value="role" >Particulier</button>
-                            <button class="btn3" type="button" id ="btn-entreprise" value="role">Entreprise</button>
-        
-                            <label for="username">Nom d'utilisateur :</label>
-                            <input type="text" id="username" name="username" required>
-        
-                            <label for="password">Mot de passe :</label>
-                            <input type="password" id="password" name="password" required>
-        
-                            <label for="phone">Téléphone :</label>
-                            <input type="text" id="phone" name="phone" required>
-        
-                            <label for="email">Adresse e-mail :</label>
-                            <input type="email" id="email" name="email" required>
-                        </div>
-                        <input type = "hidden" id = "role" name = "role">
-                        <br>
-                        <button class="btn3" type="submit">S'inscrire</button>
-                    </form>
+    <main>
+        <div class="login-box">
+            <div class="login-button" id="login-register">
+                <button class="btn3" id="login-button" style="font-family: 'Ubuntu', sans-serif;">Connexion</button>
+                <button class="btn3" id="register-button" style="font-family: 'Ubuntu', sans-serif;">Inscription</button>
+            </div>
+        </div>
+        <div class="box-flip-container">
+            <div class="flip-container">
+                <div class="flipper">
+                    <div class="front">
+                        <form class="form-sign" id="login-form" action="login.php" method="post">
+                            <h2>Connexion</h2>
+                            <div class="regi">
+                                <label for="login-username">Nom d'utilisateur :</label>
+                                <input type="text" id="login-username" name="username" required>
+
+                                <label for="login-password">Mot de passe :</label>
+                                <input type="password" id="login-password" name="password" required>
+                            </div>
+                            <div class="connec-button ">
+                                <button class="btn3" type="submit" style="flex: 2; font-family: 'Ubuntu', sans-serif;">Se connecter</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="back">
+                        <form class="form-regi" id="register-form">
+                            <div id="error-popup" class="error-popup">
+                                <p> Le mot de passe doit contenir au moins une majuscule, un chiffre, et doit contenir 8
+                                    caractères.</p>
+                            </div>
+                            <h2>Inscription</h2>
+                            <div class="regi">
+                                <button class="btn3" type="button" id="btn-particulier"
+                                    value="role" style="font-family: 'Ubuntu', sans-serif;">Particulier</button>
+                                <button class="btn3" type="button" id="btn-entreprise" value="role" style="font-family: 'Ubuntu', sans-serif;">Entreprise</button>
+
+                                <label for="username">Nom d'utilisateur :</label>
+                                <input type="text" id="username" name="username" required>
+
+                                <label for="email">Adresse e-mail :</label>
+                                <input type="email" id="email" name="email" required>
+
+                                <label for="phone">Téléphone :</label>
+                                <input type="text" id="phone" name="phone" required>
+
+                                <label for="password">Mot de passe :</label>
+                                <input type="password" id="password" name="password" required>
+                            </div>
+                            <div class="connec-button">
+                                <input type="hidden" id="role" name="role">
+                                <button class="btn3" type="submit" style="flex: 2; font-family: 'Ubuntu', sans-serif;">S'inscrire</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <br>
-        <div id="login-register">
-            <button class="btn3" id="login-button">Connexion</button>
-            <button class="btn3" id="register-button">Inscription</button>
-        </div>
     </main>
-    <div id="inverse-fade"></div>
     <footer id="footer">
     </footer>
     <script src="js/loader.js"></script>

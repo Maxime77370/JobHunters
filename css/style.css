@@ -1,119 +1,111 @@
 @import url("variables.css") all;
 
-body{
+body {
+    font-family: 'Ubuntu', sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     box-sizing: border-box;
-    margin: 0;
+    margin: 0; 
     padding: 0;
-    font-family: monospace;
-    font-size: 1.5vh;
+    background-color: #222222;
 }
 
-.logo img{
-    width: 8vh; 
+.logo img {
+    width: 8vh;
 }
 
-.logo{
+.logo {
     position: absolute;
-    left:50%;
-    top:5vh;
+    left: 50%;
+    top: 5vh;
     width: 8vh;
     height: 8vh;
-    margin-top: -4vh; /* Half the height */
-    margin-left: -4vh; /* Half the width */
+    margin-top: -3.5vh;
+    /* Half the height */
+    margin-left: -4vh;
+    /* Half the width */
 }
 
-main{
+main {
     width: 100vw;
-
     display: flex;
+    flex-grow: 1;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-
-    background-color: var(--color_secondary);
+    background-image: linear-gradient(185deg, #3ff8ff 0, #4ddaff 25%, #53bcf2 50%, #539fcc 75%, #4f84a8 100%);
 }
 
-a{
+a {
     text-decoration: none;
-    color: black;
-    transition: font-size 0.5s;
+    color: white;
+    font-family: 'Mont blanc';
+    transition: font-size 1s;
 }
 
-a:hover{
+a:hover {
     font-size: 2vh;
 }
 
-#burger{
+#burger {
     display: none;
     padding: 1vw;
 }
 
-#nav-bar{
+#nav-bar {
     width: 100vw;
     height: 10vh;
-
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
-
-    background-color: rgb(255, 255, 255);
+    background-color: #222222;
 }
-#nav-bar-under{
+
+#nav-bar-under {
     width: 100vw;
     height: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-direction: row;
-
-    background-color: rgb(255, 255, 255);
+    background-color: #222222;
 
     /* Transition */
     transition: all 0.5s;
     transition-property: height;
-
     visibility: hidden;
 }
 
-#nav-profile-picture{
+#nav-profile-picture {
     width: 4vh;
     height: 4vh;
     margin: 0;
     border-radius: 50%;
     vertical-align: middle;
-    background-color: var(--color_secondary);
-}
+    background: linear-gradient(to top, lime, 20%, cyan);}
 
-.nav-ul{
+.nav-ul {
     padding-inline-start: 0px;
     padding: 1vw;
 }
-.nav-ul li{
+
+.nav-ul li {
     display: inline;
     padding: 1vw;
     vertical-align: middle;
 }
 
-hr{
+hr {
     margin-bottom: -1px;
     margin-top: 0;
 }
 
-#fade{
-    width: 100vw;
-    height: 3vh;
-    background: linear-gradient(0deg, var(--color_secondary) 0%, var(--color_main) 100%);
-}
 
-#inverse-fade{
-    width: 100vw;
-    height: 3vh;
-    background: linear-gradient(0deg, var(--color_main) 0%, var(--color_secondary) 100%);
-}
-.btn{
-    all: unset;
+.btn {
     background-color: rgb(237, 237, 237);
+    font-family: 'Ubuntu', sans-serif;
     padding: 1vh;
     border-radius: 2vh;
     align-self: center;
@@ -121,7 +113,7 @@ hr{
     transition: all 0.5s;
 }
 
-.btn:hover{
+.btn:hover {
     background-color: rgb(255, 255, 255);
     box-shadow: var(--box_shadow);
 }
@@ -132,11 +124,11 @@ hr{
     left: 0;
     width: 100vw;
     height: 100vh;
-    -webkit-backdrop-filter: blur(2px);
+    --webkit-backdrop-filter: blur(2px);
     transition: all 0.5s;
 }
 
-#cookie-box{
+#cookie-box {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -154,32 +146,33 @@ hr{
     justify-content: center;
 }
 
-footer{
+footer {
     width: 100vw;
-    position: relative;
     bottom: 0;
     height: fit-content;
+    background-color: #222222;
 }
 
 @media screen and (max-width: 519px) {
-    #nav-bar ul{
+    #nav-bar ul {
         display: none;
     }
 
-    #nav-bar-under.active{
-        height: 5vh; /* Hauteur finale de la navbar */
+    #nav-bar-under.active {
+        height: 7vh;
+        /* Hauteur finale de la navbar */
 
         visibility: visible;
     }
 
-    #burger{
+    #burger {
         display: block;
         width: 6vh;
         height: 6vh;
         transition: all 0.5s;
     }
 
-    #burger:hover{
+    #burger:hover {
         transform: rotate(180deg);
     }
 }

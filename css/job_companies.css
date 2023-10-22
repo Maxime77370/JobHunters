@@ -1,18 +1,14 @@
 @import url(variables.css) all;
 
-.main-box-search {
-    display: grid;
-    overflow-x: hidden;
-}
-
-
 .search-bar{
     display : flex;
     position: sticky;
+    top: 0; 
     align-items: center;
     justify-content: space-around;
-    bottom: 90vh;
+    width: 90vw;
     padding: 1vh 5vw;
+    background-color: var(--color_main);
 }
 
 .search{
@@ -23,7 +19,7 @@
     height: 3vh;
     border-radius: 2vh;
     z-index: 1;
-
+    box-shadow: var(--box_shadow);
 }
 
 #job-board{
@@ -32,7 +28,7 @@
     align-items: center;
     justify-content: center;
     width: 100vw;
-    background-image: linear-gradient(185deg, #3ff8ff 0, #4ddaff 25%, #53bcf2 50%, #539fcc 75%, #4f84a8 100%);
+    background-color: var(--color_secondary);
     padding: 5vh 0;
 }
 
@@ -42,7 +38,7 @@
     margin: 2vh;
     background-color: white;
     border-radius: 5px;
-    background-color: none;
+    box-shadow: var(--box_shadow);
     max-width: 40vw;
     overflow: hidden;
 }
@@ -80,19 +76,11 @@
     justify-content: space-between;
 }
 
-.btns {
+.btn{
     position: relative;
-    background-color: rgb(237, 237, 237);
-    padding: 2vh;
-    border-radius: 2vh;
-    bottom: 1vh;
-    transition: all 0.5s;
+
 }
 
-.btns:hover {
-    background-color: rgb(255, 255, 255);
-    box-shadow: none;
-}
 
 .title{
     font-size: 1.5em;
@@ -133,9 +121,5 @@
 
     .min{
         width: 40vw;
-    }
-
-    .btns{
-        padding: 1vh;
     }
 }

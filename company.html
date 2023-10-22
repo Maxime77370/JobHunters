@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel='stylesheet' href='css/company.css'>
+    <title>Search</title>
+</head>
+<body>
+    <header id="header">
+    </header>
+    <hr>
+    <main>
+        <div id="company-board">
+        </div>
+        <div id="company-advertisement">
+            <button id="add-advertisement" class="btn">Add advertisment</button>
+            <div id="show-advertisement"></div>
+            <div id="show-apply"></div>
+        </div>
+    </main>
+    <main id="main-box-ann">
+        <form id="form-add-advertisement">
+            <div class="title">
+                <h1>Deposer votre annonce</h1>
+            </div>
+            <div class="ann-box">
+
+                <label for="nom">
+                    <h3>Nom du job :</h3>
+                </label>
+                <input type="text" id="nom" name="nom" required>
+
+                <label for="lieu">
+                    <h3>Lieu :</h3>
+                </label>
+                <input type="text" id="lieu" name="lieu" required>
+
+                <label for="horaire">
+                    <h3>Horaire:</h3>
+                </label>
+                <input type="text" id="horaire" name="horaire" required>
+
+                <label for="remuneration">
+                    <h3>Remuneration:</h3>
+                </label>
+                <input type="number" id="remuneration" name="remuneration" required>
+
+                <label for="description">
+                    <h3>Description de votre annonce :</h3>
+                </label>
+                <textarea id="description" name="description" rows="4" required></textarea>
+
+                <label for="full_description">
+                    <h3>Description complÃ¨te de votre annonce :</h3>
+                </label>
+                <textarea id="full_description" name="full-description" rows="4" required></textarea>
+            </div>
+            <button type="submit">
+                <h3>Envoyer</h3>
+            </button>
+        </form>
+
+    </main>
+    <hr>
+    <footer id="footer">
+    </footer>
+    <script src="js/loader.js"></script>
+    <script src="js/show_company.js"></script>
+</body>
+</html>

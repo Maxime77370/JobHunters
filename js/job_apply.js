@@ -8,6 +8,8 @@ postule_css.rel = "stylesheet";
 postule_css.href = "css/postule.css";
 body.appendChild(postule_css);
 
+const userId = getUserIdFromToken(token);
+
 function formatDate(isoDate) {
     const date = new Date(isoDate);
 
@@ -19,7 +21,7 @@ function formatDate(isoDate) {
     const minutes = String(date.getMinutes()).padStart(2, '0');
     const seconds = String(date.getSeconds()).padStart(2, '0');
 
-    return `${day}/${month}/${year} - ${hours}:${minutes}:${seconds}`;
+    return ` Postulé le ${day}/${month}/${year} à  ${hours}:${minutes}:${seconds}`;
 }
 
 
@@ -44,10 +46,7 @@ async function getCompanyNameFromJobApplication(jobApplicationId) {
     const jobAdResponse = await fetch(`http://localhost:8000/get_table/job_advertisements/${jobAppData.job_advertisement_id}`, {
         method: "GET",
     });
-    if (!jobAdResponse.ok) {
-        console.error("Erreur lors de la récupération de job_advertisement.");
-        return null;
-    }
+
     const jobAdData = await jobAdResponse.json();
 
     // Vérification si company_id existe dans jobAdData
@@ -102,7 +101,7 @@ async function getJobAdTitleFromJobApplication(jobApplicationId) {
 
 async function init_advertisement() {
     try {
-        const response = await fetch("http://localhost:8000/get_id_table/job_applications", {
+        const response = await fetch("http://localhost:8000/get_id_table_by_user/job_applications/"+userId, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

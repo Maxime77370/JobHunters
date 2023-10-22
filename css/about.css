@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     padding: auto;
-    background-color: var(--color_secondary);
+    background-image: linear-gradient(185deg, #3ff8ff 0, #4ddaff 25%, #53bcf2 50%, #539fcc 75%, #4f84a8 100%);
 }
 
 .grande-box {
@@ -14,8 +14,8 @@
     align-items: center;
     padding: auto;
     background-color: white;
-    border-radius: 5px;
-    box-shadow: var(--box_shadow);
+    border-radius: 10px;
+    /* box-shadow: var(--box_shadow); */
     margin-top: 3vh;
     margin-bottom: 3vh;
     margin-left: 3vh;

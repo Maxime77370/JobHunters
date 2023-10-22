@@ -19,7 +19,7 @@ const div_parent = document.querySelectorAll("#connect");
 
 function create_connexion() {
     for (div of div_parent) {
-        div.innerHTML += "<li><a href=\"login.html\">Login</a></li>";
+        div.innerHTML += "<li><a href=\"login.html\">Connexion</a></li>";
     }
 }
 
@@ -27,16 +27,15 @@ function create_connected(user_data) {
     for (div of div_parent) {
         div.innerHTML = `<li><a href="profile.html"><img src="img/profile_1.png" alt="profile picture nav" id="nav-profile-picture"> ${user_data.username}</a></li>|`;
         if (user_data.role === "particulier") {
-            // Utilisateur particulier, n'ajoutez rien de spécial.
+            div.innerHTML += '<li><a href="job_apply" id="job_apply">Mes emplois</a></li>';
         } else if (user_data.role === "entreprise") {
             // Utilisateur entreprise, ajoutez des options d'entreprise.
-            div.innerHTML += '<li><a href="job_ads.html">Créer un job</a></li>|';
-            div.innerHTML += '<li><a href="personnaliser.html">Mon entreprise</a></li>';
+            div.innerHTML += '<li><a href="company.html">Mon entreprise</a></li>';
         } else if (user_data.role === "admin") {
-            // Utilisateur admin, ajoutez des options d'administration.
-            div.innerHTML += '<li><a href="admin.html">Page admin</a></li>';
+            div.innerHTML += '<li><a href="job_apply" id="job_apply">Mes emplois</a></li>|';
+            div.innerHTML += '<li><a href="admin.html">Panel</a></li>|';
         }
-        div.innerHTML += '<li><a href="search.html" id="logout-button">Sign out</a></li>';
+        div.innerHTML += '<li><a href="search.html" id="logout-button">Déconnexion</a></li>';
     }
 }
 

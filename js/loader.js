@@ -2,6 +2,12 @@ ask_cookies = false;
 
 const token = localStorage.getItem("Jeton JWT");
 
+function getUserIdFromToken(token) {
+  const decodedToken = atob(token.split('.')[1]);
+  const payload = JSON.parse(decodedToken);
+  return payload.id;
+}
+
 
 const body = document.getElementsByTagName('body')[0];
 const header = document.getElementById("header");
