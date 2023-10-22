@@ -14,7 +14,7 @@ Use the "jobboard.sql" file and change it as you wish
 
 ## Installation
 
-Use the "requirements.txt file"  to install packages.Once this is made, run the app in your website folder using uvicorn api:app --reload
+Use the "requirements.txt file"  to install packages. Once this is made, run the api in your website folder using uvicorn api:app --reload
 
 ```bash
 pip install -r requirements.txt
