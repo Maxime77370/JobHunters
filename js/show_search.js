@@ -235,10 +235,32 @@ async function sendApplicationData(jobId, motivationLetter) {
     }
 }
 
+
+
+
 async function apply_advertisment(jobId) {
     // Créer le formulaire
+    const user_id = getUserIdFromToken(token);
+
     const main_post = document.createElement("div");
     main_post.className = "main-box-post";
+
+    if (!user_id) { // Si l'utilisateur n'est pas connecté
+        const notConnectedBox = document.createElement("div");
+        notConnectedBox.innerHTML = `
+            <p>Vous devez être connecté pour postuler à cette offre.</p>
+            <button id="btnConnecter">Se connecter</button>
+        `;
+
+        notConnectedBox.querySelector("#btnConnecter").addEventListener("click", () => {
+            window.location.href = "/login"; // Redirige vers la page de connexion
+        });
+
+        main_post.appendChild(notConnectedBox);
+        document.body.appendChild(main_post);
+        return; // Termine la fonction ici si l'utilisateur n'est pas connecté
+    } else {
+
 
     const form = document.createElement("form");
     form.className = "postule";
@@ -309,7 +331,7 @@ async function apply_advertisment(jobId) {
 
     main_post.appendChild(form);
     
-    body.appendChild(main_post);
+    document.body.appendChild(main_post);
 
     exitButton.style = "top: " + form.offsetTop + "px; left: " + form.offsetWidth + "px; position: absolute;";
 
@@ -318,13 +340,12 @@ async function apply_advertisment(jobId) {
 
         const motivationLetter = document.getElementById("a_propos").value;
         await sendApplicationData(jobId, motivationLetter);
-
-
+        main_post.remove();
 
 
     });
     return form;
-}
+}}
 
 
 // Fonction pour effectuer la recherche

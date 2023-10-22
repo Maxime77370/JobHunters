@@ -44,7 +44,7 @@ function getUserDataFromToken(token) {
 
 async function init_company(){
     user_data = getUserDataFromToken(token);
-
+    console.log(user_data)
     try{
         const response = await fetch("http://localhost:8000/get_company_owned/" + user_data.id, {
             method: "GET",
@@ -317,6 +317,7 @@ async function editJobDetails(job_id, job_data, company_id) {
 }
 
 async function add_job(company_id){
+    
     const form_create_job = document.getElementById
     ("form-add-advertisement");
     document.getElementById("main-box-ann").style.display = "block";
@@ -324,6 +325,7 @@ async function add_job(company_id){
     form_create_job.addEventListener("submit", async (e) => {
         e.preventDefault();
         try {
+
             const response = await fetch("http://localhost:8000/create_job_advertisements", {
                 method: "POST",
                 headers: {
@@ -342,6 +344,10 @@ async function add_job(company_id){
         } catch (error) {
             console.error("Erreur:", error);
         }
+        
+    });
+    document.getElementById("exit-add").addEventListener("click",  (e) =>{
+        form_create_job.style.display = "none";
     });
 }
 

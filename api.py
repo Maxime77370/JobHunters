@@ -89,6 +89,7 @@ class Advertisement(BaseModel):
 class Company(BaseModel):
     name: str
     description: str
+    owner_id : int
 
 class User(BaseModel):
     username: str
@@ -158,8 +159,8 @@ def create_companies(company: Company):
     try:
         conn = mysql.connector.connect(**db_config)
         cursor = conn.cursor()
-        query = "INSERT INTO companies (name, description) VALUES (%s, %s)"
-        values = (company.name, company.description)
+        query = "INSERT INTO companies (name, description, owner_id) VALUES (%s, %s, %s)"
+        values = (company.name, company.description, company.owner_id)
         cursor.execute(query, values)
         conn.commit()
         created_id = cursor.lastrowid
@@ -216,6 +217,36 @@ def modify_companies(company: Company, id: int):
     except Exception as e:
         return {"message": f"Error: {str(e)}"}
     
+@app.post("/modify_job_advertisements/{id}", tags=["Job Advertisements"])
+def modify_job_advertisements(job_advertisement: Advertisement, id: int):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        query = "UPDATE job_advertisements SET title = %s, description = %s, full_description = %s, wages = %s, location = %s, working_time = %s, company_id = %s WHERE id = " + str(id)
+        values = (job_advertisement.title, job_advertisement.description, job_advertisement.full_description, job_advertisement.wages, job_advertisement.location, job_advertisement.working_time, job_advertisement.company_id)
+        cursor.execute(query, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return {"message": "Advertisement modified successfully"}
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+
+@app.post("/modify_job_applications/{id}", tags=["Job Applications"])
+def modify_job_applications(job_application: JobApplication, id: int):
+    try:
+        conn = mysql.connector.connect(**db_config)
+        cursor = conn.cursor()
+        query = "UPDATE job_applications SET user_id = %s, job_advertisement_id = %s, message = %s WHERE id = " + str(id)
+        values = (job_application.user_id, job_application.job_advertisement_id, job_application.message)
+        cursor.execute(query, values)
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return {"message": "Job application modified successfully"}
+    except Exception as e:
+        return {"message": f"Error: {str(e)}"}
+
 @app.get("/get_company_owned/{id_owner}", tags=["Companies"])
 def get_company_owned(id_owner: str):
     try:
